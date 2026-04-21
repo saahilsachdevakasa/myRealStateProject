@@ -109,3 +109,39 @@ Stop and ask. Sahil is the Product Owner. Ambiguity in the epic spec is a defect
 - `docs/phase1-architecture.docx` — full architecture (object model, sharing, automation, commission, CP portal, Agentforce)
 - `docs/epics/` — per-epic specifications (drafted as each epic approaches)
 - `docs/manual-setup-steps.md` — any one-time Setup-UI steps that must be reproduced on SDO refresh
+
+## Salesforce metadata gotchas learned from E02a and E02b
+
+These are Salesforce metadata-schema quirks discovered during metadata generation. Apply them to all future metadata epics.
+
+1. **Formula fields cannot carry `<unique>` or `<externalId>` attributes.** Salesforce rejects them at deploy time. Uniqueness on formula fields is inherent in formula determinism.
+
+2. **Count roll-up summary fields must omit `<summarizedField>` entirely.** That element is only valid for SUM / MIN / MAX roll-ups on numeric fields, not COUNT.
+
+3. **Formula fields cannot return a reference type (Lookup).** If the spec calls for "Formula(Lookup to X)", implement as Formula(Text) returning the most useful denormalized value — typically a code field from the target record.
+
+4. **Required Lookup fields (`<required>true</required>`) must specify delete behavior.** Add `<deleteConstraint>Restrict</deleteConstraint>` (typical for references that shouldn't orphan) or `<deleteConstraint>Cascade</deleteConstraint>` (for tight parent-child). Without either, deploy fails with "must specify either cascade delete or restrict delete for required lookup foreign key".
+
+5. **Use `BusinessProcess`, not `SalesProcess`.** The correct metadata for restricting Lead statuses or Opportunity stages per record type is `BusinessProcess`, placed at `force-app/main/default/objects/<Object>/businessProcesses/<Name>.businessProcess-meta.xml`. Do NOT use the top-level `salesProcesses/` directory with `.salesProcess-meta.xml` suffix — the Salesforce CLI type inference fails on it.
+
+6. **BusinessProcess XML schema quirks:**
+   - Root element: `<BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">`
+   - Each entry uses `<fullName>` (not `<name>`)
+   - Use `<isActive>` (not `<active>`)
+   - Lead BusinessProcess requires `<default>true</default>` on exactly one status value
+   - Opportunity BusinessProcess REJECTS `<default>` inside `<values>` entirely — omit it
+
+7. **BusinessProcess `<values>` must reference existing picklist values in the target org's StandardValueSet.** Before generating BusinessProcess XML, query the org:
+
+   ```bash
+   sf data query --query "SELECT MasterLabel FROM LeadStatus ORDER BY SortOrder" --target-org <alias>
+   sf data query --query "SELECT MasterLabel, IsActive FROM OpportunityStage ORDER BY SortOrder" --target-org <alias>
+   ```
+
+   Only reference `MasterLabel` values where `IsActive = true`. Do not invent stage names that aren't in the org.
+
+8. **MultiselectPicklist fields require `<visibleLines>` greater than 3.** Setting it to 2 or 3 causes deploy failure with "Visible lines must be greater than 3".
+
+9. **The standard Name field is declared inside the object XML's `<nameField>` block, not as a separate field file.** When counting custom fields per object, expect spec's total = count of files in `fields/` folder + 1 (for Name).
+
+10. **When a record type references a BusinessProcess, both must deploy in the same deploy and the BusinessProcess's `<values>` must include every stage the record type picklist filter exposes.** Mismatches produce "no BusinessProcess named X.Y found" errors even when the BusinessProcess is in the same deploy.
