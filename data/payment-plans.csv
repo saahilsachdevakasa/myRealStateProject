@@ -1,0 +1,4 @@
+Name,Plan_Code__c,Active__c,Applicable_Project_Types__c
+Construction Linked Plan,CLP,true,Residential;Commercial
+Down Payment Plan,DLP,true,Residential;Commercial
+Possession Linked Plan,PLP,true,Residential;Commercial

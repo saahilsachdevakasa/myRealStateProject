@@ -1,0 +1,35 @@
+Name,Tower_Code__c,Project__r:Project_Code__c,Tower_Number__c,Tower_Type__c,Total_Floors__c,Units_Per_Floor__c,Construction_Status__c,Configuration_Mix__c
+PRK-T01,PRK-T01,PRK,1,Residential_Tower,4,4,In Progress,3BHK + 4BHK
+PRK-T02,PRK-T02,PRK,2,Residential_Tower,4,4,In Progress,3BHK + 4BHK
+PRK-T03,PRK-T03,PRK,3,Residential_Tower,4,4,In Progress,3BHK + 4BHK
+SPL-T01,SPL-T01,SPL,1,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+SPL-T02,SPL-T02,SPL,2,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+SPL-T03,SPL-T03,SPL,3,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+BEL-T01,BEL-T01,BEL,1,Residential_Tower,4,4,In Progress,4BHK
+BEL-T02,BEL-T02,BEL,2,Residential_Tower,4,4,In Progress,4BHK
+BEL-T03,BEL-T03,BEL,3,Residential_Tower,4,4,In Progress,4BHK
+GRN-T01,GRN-T01,GRN,1,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+GRN-T02,GRN-T02,GRN,2,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+GRN-T03,GRN-T03,GRN,3,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+HRZ-T01,HRZ-T01,HRZ,1,Residential_Tower,4,4,In Progress,3BHK
+HRZ-T02,HRZ-T02,HRZ,2,Residential_Tower,4,4,In Progress,3BHK
+HRZ-T03,HRZ-T03,HRZ,3,Residential_Tower,4,4,In Progress,3BHK
+ELY-T01,ELY-T01,ELY,1,Residential_Tower,4,4,In Progress,4BHK
+ELY-T02,ELY-T02,ELY,2,Residential_Tower,4,4,In Progress,4BHK
+ELY-T03,ELY-T03,ELY,3,Residential_Tower,4,4,In Progress,4BHK
+AUR-T01,AUR-T01,AUR,1,Residential_Tower,4,4,In Progress,3BHK
+AUR-T02,AUR-T02,AUR,2,Residential_Tower,4,4,In Progress,3BHK
+AUR-T03,AUR-T03,AUR,3,Residential_Tower,4,4,In Progress,3BHK
+SRN-T01,SRN-T01,SRN,1,Residential_Tower,4,4,In Progress,1BHK + 2BHK
+SRN-T02,SRN-T02,SRN,2,Residential_Tower,4,4,In Progress,1BHK + 2BHK
+SRN-T03,SRN-T03,SRN,3,Residential_Tower,4,4,In Progress,1BHK + 2BHK
+CSM-T01,CSM-T01,CSM,1,Residential_Tower,4,4,In Progress,2BHK
+CSM-T02,CSM-T02,CSM,2,Residential_Tower,4,4,In Progress,2BHK
+CSM-T03,CSM-T03,CSM,3,Residential_Tower,4,4,In Progress,2BHK
+MRD-T01,MRD-T01,MRD,1,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+MRD-T02,MRD-T02,MRD,2,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+MRD-T03,MRD-T03,MRD,3,Residential_Tower,4,4,In Progress,2BHK + 3BHK
+GAL-B01,GAL-B01,GAL,1,Commercial_Block,3,20,In Progress,Retail Shops
+GAL-B02,GAL-B02,GAL,2,Commercial_Block,3,20,In Progress,Retail + F&B
+NXS-B01,NXS-B01,NXS,1,Commercial_Block,3,20,In Progress,Retail Shops
+NXS-B02,NXS-B02,NXS,2,Commercial_Block,3,20,In Progress,Retail + F&B

@@ -1,0 +1,13 @@
+Project_Code__c,Name,Project_Type__c,Location__c,Launch_Status__c,RERA_Number__c,RERA_State__c,Delivery_Date__c,Positioning__c
+PRK,Park Residences,Residential,"Mumbai, Lower Parel",Under Construction,P51800012345,Maharashtra,2028-06-30,3BHK/4BHK Luxury
+SPL,Splendora,Residential,"Mumbai, Thane",Under Construction,P51800012346,Maharashtra,2027-12-31,2BHK/3BHK Family Premium
+BEL,Bellissimo,Residential,"Mumbai, Worli",Newly Launched,P51800012347,Maharashtra,2029-03-31,4BHK Luxury Towers
+GRN,Green Meadows,Residential,"Pune, Hinjewadi",Under Construction,P52100023456,Maharashtra,2027-09-30,2BHK/3BHK Mid-Premium
+HRZ,Horizon Heights,Residential,"Bengaluru, Whitefield",Under Construction,PRM/KA/RERA/1251/310/PR/201023/003456,Karnataka,2028-03-31,3BHK High-Rise Premium
+ELY,Elysium,Residential,"Gurugram, Sector 63",Newly Launched,RC/REP/HARERA/GGM/2025/12345,Haryana,2029-06-30,4BHK Luxury Villas-in-Tower
+AUR,Aurelia,Residential,"Noida, Sector 150",Under Construction,UPRERAPRJ123456,Uttar Pradesh,2027-12-31,3BHK Boutique Premium
+SRN,Serenity Gardens,Residential,"Pune, Wagholi",Under Construction,P52100034567,Maharashtra,2027-06-30,1BHK/2BHK Mid-Market
+CSM,Cosmos Enclave,Residential,"Noida, Greater Noida",Under Construction,UPRERAPRJ234567,Uttar Pradesh,2027-09-30,2BHK Affordable-Premium
+MRD,Meridian Towers,Residential,"Bengaluru, Sarjapur",Under Construction,PRM/KA/RERA/1251/310/PR/201023/003457,Karnataka,2028-06-30,2BHK/3BHK Mid-Market
+GAL,Galleria Central,Commercial,"Mumbai, BKC",Under Construction,P51800045678,Maharashtra,2027-12-31,Mall + F&B
+NXS,Nexus Corporate Park,Commercial,"Gurugram, Sector 29",Under Construction,RC/REP/HARERA/GGM/2025/23456,Haryana,2028-03-31,Mixed-Use Mall + Office

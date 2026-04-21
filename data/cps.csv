@@ -1,0 +1,11 @@
+Name,RecordType:DeveloperName,PAN__c,GSTIN__c,RERA_Number__c,RERA_State__c,CP_Tier__c,Empanelment_Date__c,CP_Status__c,Phone,External_CP_Code__c
+Acme Realty Advisors,Channel_Partner,AABCA1234K,27AABCA1234K1Z5,A51800001234,Maharashtra,Platinum,2024-04-15,Active,+91-98100-12345,CP-26-0001
+Prime Property Consultants,Channel_Partner,AABCP2345L,27AABCP2345L1Z6,A51800001235,Maharashtra,Platinum,2024-06-01,Active,+91-98100-23456,CP-26-0002
+Skyline Realtors,Channel_Partner,AABCS3456M,06AABCS3456M1Z7,H51800001236,Haryana,Preferred,2025-01-10,Active,+91-98100-34567,CP-26-0003
+Urban Homes Brokers,Channel_Partner,AABCU4567N,29AABCU4567N1Z8,K51800001237,Karnataka,Preferred,2025-03-22,Active,+91-98100-45678,CP-26-0004
+Metro Property Services,Channel_Partner,AABCM5678O,09AABCM5678O1Z9,U51800001238,Uttar Pradesh,Preferred,2025-05-14,Active,+91-98100-56789,CP-26-0005
+Elite Realty Network,Channel_Partner,AABCE6789P,27AABCE6789P1Z0,A51800001239,Maharashtra,Standard,2025-08-01,Active,+91-98100-67890,CP-26-0006
+Dreamhome Consultants,Channel_Partner,AABCD7890Q,27AABCD7890Q1Z1,A51800001240,Maharashtra,Standard,2025-09-12,Active,+91-98100-78901,CP-26-0007
+Realty Bridge Associates,Channel_Partner,AABCR8901R,29AABCR8901R1Z2,K51800001241,Karnataka,Standard,2025-10-05,Active,+91-98100-89012,CP-26-0008
+Cityscape Homes,Channel_Partner,AABCC9012S,06AABCC9012S1Z3,H51800001242,Haryana,Standard,2025-11-20,Active,+91-98100-90123,CP-26-0009
+Horizon Property Partners,Channel_Partner,AABCH0123T,09AABCH0123T1Z4,U51800001243,Uttar Pradesh,Standard,2026-01-08,Active,+91-98100-01234,CP-26-0010

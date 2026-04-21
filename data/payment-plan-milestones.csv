@@ -1,0 +1,18 @@
+Payment_Plan__r:Plan_Code__c,Sequence__c,Trigger__c,Trigger_Type__c,Percentage__c,Description__c,Active__c
+CLP,1.0,Booking,Construction,10.0,Within 30 days of booking; includes token,true
+CLP,2.0,Excavation & Foundation,Construction,10.0,On commencement of excavation,true
+CLP,3.0,On casting of 3rd floor slab,Construction,10.0,,true
+CLP,4.0,On casting of 6th floor slab,Construction,10.0,,true
+CLP,5.0,On casting of 9th floor slab,Construction,10.0,,true
+CLP,6.0,On casting of 12th floor slab,Construction,10.0,,true
+CLP,7.0,On casting of top floor slab,Construction,10.0,,true
+CLP,8.0,On completion of brickwork,Construction,10.0,,true
+CLP,9.0,On completion of internal plaster,Construction,10.0,,true
+CLP,10.0,On offer of possession,Construction,10.0,"Final payment including IFMS, club, parking",true
+DLP,1.0,Booking,Time-Based,20.0,Within 30 days of booking,true
+DLP,2.0,Within 60 days of booking,Time-Based,50.0,Bulk upfront; 2–5% discount typically offered on BSP,true
+DLP,3.0,On offer of possession,Time-Based,30.0,"Balance including IFMS, club, parking",true
+PLP,1.0,Booking,Possession,10.0,Token + booking amount,true
+PLP,2.0,Within 45 days of booking,Possession,10.0,Initial payment,true
+PLP,3.0,On start of finishing works,Possession,15.0,,true
+PLP,4.0,On offer of possession,Possession,65.0,Bulk payment at possession; typically financed via home loan,true
