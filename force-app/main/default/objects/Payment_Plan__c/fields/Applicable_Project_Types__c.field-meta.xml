@@ -3,7 +3,7 @@
     <fullName>Applicable_Project_Types__c</fullName>
     <label>Applicable Project Types</label>
     <type>MultiselectPicklist</type>
-    <visibleLines>2</visibleLines>
+    <visibleLines>4</visibleLines>
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
