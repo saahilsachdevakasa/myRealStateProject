@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tower_Name_Matches_Code</fullName>
+    <active>true</active>
+    <description>Tower Name must equal the derived Tower Code: {PROJ}-T{nn} for residential, {PROJ}-B{nn} for commercial. Enforced per Naming Convention Appendix Section 7.</description>
+    <errorConditionFormula>Name &lt;&gt; Tower_Code__c</errorConditionFormula>
+    <errorDisplayField>Name</errorDisplayField>
+    <errorMessage>Tower Name must match the derived Tower Code format: {PROJ}-T{nn} for residential or {PROJ}-B{nn} for commercial.</errorMessage>
+</ValidationRule>

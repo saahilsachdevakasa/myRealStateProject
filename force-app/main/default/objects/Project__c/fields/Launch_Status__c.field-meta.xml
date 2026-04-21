@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Launch_Status__c</fullName>
+    <label>Launch Status</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Planned</fullName>
+                <default>true</default>
+                <label>Planned</label>
+            </value>
+            <value>
+                <fullName>Newly Launched</fullName>
+                <default>false</default>
+                <label>Newly Launched</label>
+            </value>
+            <value>
+                <fullName>Under Construction</fullName>
+                <default>false</default>
+                <label>Under Construction</label>
+            </value>
+            <value>
+                <fullName>Ready-to-Move</fullName>
+                <default>false</default>
+                <label>Ready-to-Move</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

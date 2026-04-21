@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Code_Format</fullName>
+    <active>true</active>
+    <description>Project_Code__c must be exactly 3 uppercase ASCII letters (e.g., PRK, GAL). Enforced per Naming Convention Appendix Section 7.</description>
+    <errorConditionFormula>NOT(REGEX(Project_Code__c, &quot;^[A-Z]{3}$&quot;))</errorConditionFormula>
+    <errorDisplayField>Project_Code__c</errorDisplayField>
+    <errorMessage>Project Code must be exactly 3 uppercase letters (e.g., PRK).</errorMessage>
+</ValidationRule>

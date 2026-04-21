@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Code__c</fullName>
+    <externalId>true</externalId>
+    <formula>Tower__r.Project__r.Project_Code__c + &quot;-&quot; +
+IF(TEXT(Tower__r.Tower_Type__c) = &quot;Commercial Block&quot;, &quot;B&quot;, &quot;T&quot;) +
+RIGHT(&quot;00&quot; &amp; TEXT(Tower__r.Tower_Number__c), 2) +
+&quot;-F&quot; + RIGHT(&quot;00&quot; &amp; TEXT(Floor__c), 2) +
+IF(TEXT(Tower__r.Tower_Type__c) = &quot;Commercial Block&quot;, &quot;-S&quot;, &quot;-U&quot;) +
+RIGHT(&quot;000&quot; &amp; TEXT(Unit_Number__c), 3)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Unit Code</label>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

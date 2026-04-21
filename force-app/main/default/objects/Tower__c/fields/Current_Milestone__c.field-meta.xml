@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Current_Milestone__c</fullName>
+    <label>Current Milestone</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Booking</fullName><default>true</default><label>Booking</label></value>
+            <value><fullName>Excavation</fullName><default>false</default><label>Excavation</label></value>
+            <value><fullName>Foundation</fullName><default>false</default><label>Foundation</label></value>
+            <value><fullName>Plinth</fullName><default>false</default><label>Plinth</label></value>
+            <value><fullName>Slab Cast</fullName><default>false</default><label>Slab Cast</label></value>
+            <value><fullName>Brickwork</fullName><default>false</default><label>Brickwork</label></value>
+            <value><fullName>Plastering</fullName><default>false</default><label>Plastering</label></value>
+            <value><fullName>Flooring</fullName><default>false</default><label>Flooring</label></value>
+            <value><fullName>Finishing</fullName><default>false</default><label>Finishing</label></value>
+            <value><fullName>Possession</fullName><default>false</default><label>Possession</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

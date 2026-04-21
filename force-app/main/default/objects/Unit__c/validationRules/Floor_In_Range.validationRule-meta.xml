@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Floor_In_Range</fullName>
+    <active>true</active>
+    <description>Floor must be between 1 and 99 inclusive. Enforced per Naming Convention Appendix Section 7.</description>
+    <errorConditionFormula>OR(Floor__c &lt; 1, Floor__c &gt; 99)</errorConditionFormula>
+    <errorDisplayField>Floor__c</errorDisplayField>
+    <errorMessage>Floor must be between 1 and 99.</errorMessage>
+</ValidationRule>

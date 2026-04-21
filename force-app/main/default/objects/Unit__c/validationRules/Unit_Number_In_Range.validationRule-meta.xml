@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Number_In_Range</fullName>
+    <active>true</active>
+    <description>Unit Number must be between 1 and 999 inclusive. Enforced per Naming Convention Appendix Section 7.</description>
+    <errorConditionFormula>OR(Unit_Number__c &lt; 1, Unit_Number__c &gt; 999)</errorConditionFormula>
+    <errorDisplayField>Unit_Number__c</errorDisplayField>
+    <errorMessage>Unit Number must be between 1 and 999.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Floor_Rise_Pct__c</fullName>
+    <formula>1.5 * (Floor__c - 1)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Floor Rise Premium %</label>
+    <precision>5</precision>
+    <scale>2</scale>
+    <type>Percent</type>
+</CustomField>

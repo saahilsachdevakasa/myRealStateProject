@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Active_for_Bookings__c</fullName>
+    <defaultValue>true</defaultValue>
+    <label>Active for Bookings</label>
+    <type>Checkbox</type>
+</CustomField>
