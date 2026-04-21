@@ -228,4 +228,170 @@ Native roll-ups included:
 
 ## Implemented
 
-Populated post-deploy.
+**Commits**
+- `eec8afe` — docs(E02b): draft epic spec
+- `a4a8ffc` — feat(E02b): customer, transactional, CP, and supporting clusters
+- `e6eec80` — fix(E02b): businessProcess structure, required-lookup delete constraints, visible lines, Lead/Opp stage values
+
+**Deployed to** `re-crm-sdo` on 2026-04-21 across two sessions (the first
+hit its 3-hour limit mid-execution; state was preserved on disk, and the
+resume session produced the remaining 7 objects + `Unit__c.Active_Booking__c`
+before committing and deploying). Verified via `EntityDefinition` query: all
+19 new objects present.
+
+### Counts summary
+
+| Cluster | Object | Custom fields | Record types | Validation rules | Tab |
+|---|---|---|---|---|---|
+| Customer | Lead (extended) | 15 | 2 | 0 | — (standard) |
+| Customer | Account (extended) | 18 | 3 | 0 | — (standard) |
+| Customer | Contact (extended) | 6 | 0 | 0 | — (standard) |
+| Customer | Site_Visit__c | 15 | 0 | 0 | 1 |
+| Transactional | Opportunity (extended) | 12 | 2 | 0 | — (standard) |
+| Transactional | Booking__c | 34 | 2 | 1 | 1 |
+| Transactional | Booking_Customer__c | 7 | 0 | 0 | — |
+| Transactional | Payment_Plan__c | 6 | 0 | 1 | 1 |
+| Transactional | Payment_Plan_Milestone__c | 8 | 0 | 0 | — |
+| Transactional | Booking_Payment_Schedule__c | 13 | 0 | 0 | — |
+| Transactional | Demand__c | 21 | 0 | 0 | 1 |
+| Transactional | Receipt__c | 15 | 0 | 0 | 1 |
+| Transactional | Receipt_Allocation__c | 5 | 0 | 0 | — |
+| Transactional | Agreement__c | 17 | 0 | 0 | 1 |
+| Transactional | Possession__c | 15 | 0 | 0 | 1 |
+| Transactional | Snag_Item__c | 9 | 0 | 0 | — |
+| Transactional | Pricing_Component__c | 11 | 0 | 0 | — |
+| Transactional | Unit__c.Active_Booking__c | 1 (added to existing) | — | — | — |
+| Channel Partner | Commission_Rate_Card__c | 10 | 0 | 0 | 1 |
+| Channel Partner | Commission_Ledger__c | 15 | 0 | 0 | 1 |
+| Channel Partner | Commission_Payout__c | 11 | 0 | 0 | 1 |
+| Supporting | Notification_Preference__c | 8 | 0 | 0 | — |
+| Supporting | Concession_Request__c | 12 | 0 | 0 | 1 |
+| Supporting | Document_Checklist__c | 9 | 0 | 0 | — |
+| **Total** | **24 objects touched** | **293** | **9** | **2** | **11** |
+
+Plus 2 BusinessProcess metadata files (`Lead.Lead_Qualification_Process`,
+`Opportunity.Pre_Sales_Process`) required by the Lead and Opportunity
+record types.
+
+### Deployment story
+
+Five fix rounds between first commit and green deploy. Root causes:
+
+1. **SalesProcess file in wrong location/extension.** Initial attempt
+   placed it under `force-app/main/default/salesProcesses/` with
+   `.salesProcess-meta.xml`. Correct location is
+   `force-app/main/default/objects/<Obj>/businessProcesses/` with
+   `.businessProcess-meta.xml`. Root element is `BusinessProcess`, not
+   `SalesProcess`.
+2. **BusinessProcess XML schema** — the root element must include
+   `<fullName>` (SFDX source format does not infer it from the filename
+   for this type), and the active element is `<isActive>` not
+   `<active>`.
+3. **BusinessProcess `<values>` children** — for **Lead**, `<values>`
+   takes a nested `<fullName>` + `<default>` structure; for
+   **Opportunity**, `<default>` is rejected ("Cannot specify a default
+   on: Opportunity"). The default Opportunity stage must be set at the
+   picklist level, not in the BusinessProcess.
+4. **Required Lookup fields** (`Booking__c.Opportunity__c`,
+   `Site_Visit__c.Project__c`) — required lookups must declare
+   `<deleteConstraint>Restrict</deleteConstraint>` (cannot combine
+   `SetNull` with `required>true`).
+5. **Lead and Opportunity record types require a BusinessProcess** —
+   missing this element caused RT deploy failures. Added
+   `Lead_Qualification_Process` and `Pre_Sales_Process` and referenced
+   them from each RT.
+6. **Stage / status values must already exist on the SDO.** The SDO's
+   Lead Status picklist uses `New / Working / Qualified / Converted /
+   Unqualified` (not the `Open - Not Contacted / …` labels in the
+   spec); Opportunity StageName on SDO has 6 active stages
+   (Qualification, Discovery, Proposal/Quote, Negotiation, Closed Won,
+   Closed Lost). Business processes updated to reference only existing
+   active values.
+7. **MultiselectPicklist `<visibleLines>` must be > 3** (Salesforce
+   metadata constraint). `Payment_Plan__c.Applicable_Project_Types__c`
+   bumped from 2 to 4.
+
+### Deviations from spec (finalised)
+
+1. **Contact custom fields not enumerated in arch doc Section 3.3.** Six
+   chosen and shipped: `PAN__c`, `Aadhaar_Last4__c`, `DOB__c`,
+   `NRI_Status__c`, `Passport_Number__c`, `Occupation__c`. Rationale:
+   Contact represents the individual co-buyer; Account carries the
+   household/entity KYC. Open for Sahil to redirect.
+2. **`Booking__c.Project__c`** is `Formula(Text)` returning
+   `Unit__r.Tower__r.Project__r.Project_Code__c` (Section 3.4 says
+   `Formula(Lookup)`; not supported).
+3. **`Booking__c.Source_Channel__c` and `Opportunity.Source_Channel__c`**
+   are plain Picklists, not formulas. Copy-and-lock logic lives in a
+   later-epic trigger.
+4. **`Booking__c.Customer_Count__c`** added (not in spec) — a roll-up
+   count of `Booking_Customer__c` records, which enables the
+   `Joint_Booking__c` formula (`Customer_Count__c > 1`). The spec
+   requires `Joint_Booking__c` but offers no supporting count.
+5. **Lookup-based "roll-ups" implemented as plain fields.** Salesforce
+   native roll-up summaries require Master-Detail. Spec fields like
+   `Demand__c.Amount_Received__c`,
+   `Booking_Payment_Schedule__c.Amount_Received__c`,
+   `Commission_Payout__c.Entry_Count__c / Gross_Commission__c /
+   GST_Total__c / TDS_Total__c` are plain Currency/Number — triggers
+   populate them in later epics.
+6. **Native roll-up summaries shipped** where Master-Detail allows:
+   `Receipt__c.Amount_Allocated__c` (SUM),
+   `Payment_Plan__c.Milestone_Count__c` (COUNT),
+   `Payment_Plan__c.Total_Pct_Check__c` (SUM),
+   `Booking__c.Total_Paid__c` (SUM of Receipt.Amount),
+   `Booking__c.Customer_Count__c` (COUNT),
+   `Possession__c.Snag_Count__c` (COUNT),
+   `Possession__c.Open_Snag_Count__c` (COUNT with Status filter).
+7. **`Commission_Rate_Card__c.Total_Pct__c` formula multiplies by 100.**
+   Salesforce Percent data-entry fields store as decimal fractions (5%
+   → 0.05) and return the decimal when referenced in formulas. Summing
+   three Percent fields yields a decimal; to display as a percentage,
+   the formula multiplies by 100.
+8. **`Commission_Ledger__c.Gross_Commission__c`** = `Basis × Rate_Pct__c`
+   (no `/100`). `Rate_Pct__c` is data-entry Percent (5% stored as
+   0.05), so the multiplication yields the correct money amount
+   directly.
+9. **`Lead.External_Lead_Id__c`** ships as `unique + externalId`. Plain
+   Text field (not a formula), so the E02a restriction on
+   formula-field attributes does not apply.
+10. **SDO-specific picklist values in BusinessProcesses.** Lead process
+    uses SDO's actual 5 Lead Status values; Opportunity process uses
+    the 6 active OpportunityStage values on the SDO. The demo narrative
+    stages in Section 3.4 (New → Qualified → Site Visit Scheduled →
+    … → Token Paid → Closed Won / Closed Lost) require a
+    `StandardValueSet` customisation, deferred.
+11. **Cross-row validations deferred.** "Exactly one primary buyer per
+    Booking" and "sum of Ownership_Pct = 100" on
+    `Booking_Customer__c` cannot be enforced by declarative validation
+    rules. Tracked for E08.
+12. **Picklists without full enumeration in spec** populated with
+    reasonable defaults:
+    `Booking__c.Cancellation_Reason__c` (Buyer Withdrew / Financing
+    Failed / Dispute / Admin Cancelled / Other); Commission statuses
+    per Section 3.5.
+13. **OWD** on every new custom object is `ReadWrite` (or
+    `ControlledByParent` for Master-Detail children). E03 applies the
+    production sharing spec.
+
+### Manual Setup steps (if any)
+
+None. Everything is in source.
+
+### Known follow-ups for later epics
+
+- **E02c**: permission sets, tab visibility per profile, app tab
+  assignments.
+- **E03**: OWD tightening per Section 5.1.
+- **E05–E17**: triggers for Name generation (Booking, Demand, Agreement,
+  Possession, Commission_Ledger), Unit ↔ Active_Booking maintenance,
+  Lookup-based roll-up population (Demand amount received,
+  Commission_Payout aggregates).
+- **E07**: Unit status lifecycle — includes wiring
+  `Unit__c.Active_Booking__c`.
+- **E08**: Flow enforcing one-primary-buyer and ownership-pct-sums-to-100
+  on `Booking_Customer__c`.
+- **E10**: approval process on `Concession_Request__c`.
+- **Standard-value-set epic** (if demo narrative needs Section 3.4's
+  exact stage labels): customise `Lead.Status` and
+  `Opportunity.StageName` StandardValueSet.
