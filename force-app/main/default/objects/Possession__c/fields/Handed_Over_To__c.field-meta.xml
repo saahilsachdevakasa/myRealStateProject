@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Handed_Over_To__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Handed Over To</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Possessions Received</relationshipLabel>
+    <relationshipName>Possessions_Received</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

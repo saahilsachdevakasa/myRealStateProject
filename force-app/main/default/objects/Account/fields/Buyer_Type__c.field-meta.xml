@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Buyer_Type__c</fullName>
+    <label>Buyer Type</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Self-Use</fullName><default>true</default><label>Self-Use</label></value>
+            <value><fullName>Investor</fullName><default>false</default><label>Investor</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

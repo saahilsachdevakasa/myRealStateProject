@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RM_At_Booking__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>RM at Booking</label>
+    <referenceTo>User</referenceTo>
+    <relationshipLabel>Bookings as RM</relationshipLabel>
+    <relationshipName>Bookings_As_RM</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

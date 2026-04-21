@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <label>Pricing Component</label>
+    <nameField>
+        <displayFormat>PC-{YY}-{00000}</displayFormat>
+        <label>Pricing Component Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Pricing Components</pluralLabel>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

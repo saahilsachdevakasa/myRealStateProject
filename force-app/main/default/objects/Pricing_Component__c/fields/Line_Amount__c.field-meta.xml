@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Line_Amount__c</fullName>
+    <formula>CASE(TEXT(Calculation_Basis__c),
+  &quot;Per sq ft&quot;, Rate__c * Area_Basis__c,
+  &quot;Percentage&quot;, Rate__c * Base_Ref_Amount__c / 100,
+  &quot;Fixed&quot;, Rate__c,
+  &quot;Percentage of BSP+PLC&quot;, Rate__c * Base_Ref_Amount__c / 100,
+  &quot;Percentage of Agreement Value&quot;, Rate__c * Base_Ref_Amount__c / 100,
+  0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Line Amount</label>
+    <precision>18</precision>
+    <scale>2</scale>
+    <type>Currency</type>
+</CustomField>

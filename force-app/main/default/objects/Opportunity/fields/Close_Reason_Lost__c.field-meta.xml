@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Close_Reason_Lost__c</fullName>
+    <label>Close Reason (Lost)</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Price</fullName><default>false</default><label>Price</label></value>
+            <value><fullName>Location</fullName><default>false</default><label>Location</label></value>
+            <value><fullName>Inventory</fullName><default>false</default><label>Inventory</label></value>
+            <value><fullName>Competitor</fullName><default>false</default><label>Competitor</label></value>
+            <value><fullName>Not Ready</fullName><default>false</default><label>Not Ready</label></value>
+            <value><fullName>Other</fullName><default>false</default><label>Other</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

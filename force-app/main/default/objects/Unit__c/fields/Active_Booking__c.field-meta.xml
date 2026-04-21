@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Active_Booking__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Active Booking</label>
+    <referenceTo>Booking__c</referenceTo>
+    <relationshipLabel>Active Booking for Unit</relationshipLabel>
+    <relationshipName>Active_Booking_For_Unit</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

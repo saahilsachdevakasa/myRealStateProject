@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reconciled_By__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Reconciled By</label>
+    <referenceTo>User</referenceTo>
+    <relationshipLabel>Receipts Reconciled</relationshipLabel>
+    <relationshipName>Receipts_Reconciled</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

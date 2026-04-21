@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Open_Snag_Count__c</fullName>
+    <label>Open Snag Count</label>
+    <summaryFilterItems>
+        <field>Snag_Item__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Open,In Progress</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Snag_Item__c.Possession__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Channel__c</fullName>
+    <label>Source Channel</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Digital</fullName><default>true</default><label>Digital</label></value>
+            <value><fullName>Aggregator-99acres</fullName><default>false</default><label>Aggregator-99acres</label></value>
+            <value><fullName>Aggregator-MagicBricks</fullName><default>false</default><label>Aggregator-MagicBricks</label></value>
+            <value><fullName>Aggregator-Housing</fullName><default>false</default><label>Aggregator-Housing</label></value>
+            <value><fullName>Meta-LeadAd</fullName><default>false</default><label>Meta-LeadAd</label></value>
+            <value><fullName>Google-LeadGen</fullName><default>false</default><label>Google-LeadGen</label></value>
+            <value><fullName>CP</fullName><default>false</default><label>CP</label></value>
+            <value><fullName>Walk-in</fullName><default>false</default><label>Walk-in</label></value>
+            <value><fullName>Referral</fullName><default>false</default><label>Referral</label></value>
+            <value><fullName>Other</fullName><default>false</default><label>Other</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

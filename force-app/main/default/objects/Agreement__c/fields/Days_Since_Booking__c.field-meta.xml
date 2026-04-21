@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Days_Since_Booking__c</fullName>
+    <formula>TODAY() - Booking__r.Booking_Date__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Days Since Booking</label>
+    <precision>5</precision>
+    <scale>0</scale>
+    <type>Number</type>
+</CustomField>

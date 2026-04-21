@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Pct_Check__c</fullName>
+    <label>Total Percentage Check</label>
+    <summarizedField>Payment_Plan_Milestone__c.Percentage__c</summarizedField>
+    <summaryForeignKey>Payment_Plan_Milestone__c.Payment_Plan__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <type>Summary</type>
+</CustomField>

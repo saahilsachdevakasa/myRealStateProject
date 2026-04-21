@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Must_Be_Blocked_At_Booking</fullName>
+    <active>true</active>
+    <description>The linked Unit must be in Blocked status at Booking creation. Booking directly from Available is not allowed — blocking is a required pre-step. Enforced per Naming Convention Appendix Section 7.</description>
+    <errorConditionFormula>AND(ISNEW(), TEXT(Unit__r.Unit_Status__c) &lt;&gt; &quot;Blocked&quot;)</errorConditionFormula>
+    <errorDisplayField>Unit__c</errorDisplayField>
+    <errorMessage>The Unit must be in Blocked status before a Booking can be created.</errorMessage>
+</ValidationRule>

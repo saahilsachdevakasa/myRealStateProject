@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Channel__c</fullName>
+    <formula>IF(NOT(ISBLANK(Opportunity__c)), TEXT(Opportunity__r.Source_Channel__c), IF(NOT(ISBLANK(Lead__c)), TEXT(Lead__r.Source_Channel__c), ""))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Source Channel</label>
+    <type>Text</type>
+</CustomField>

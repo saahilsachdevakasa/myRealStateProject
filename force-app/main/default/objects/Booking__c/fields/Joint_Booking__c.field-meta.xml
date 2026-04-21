@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Joint_Booking__c</fullName>
+    <formula>Customer_Count__c &gt; 1</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Joint Booking</label>
+    <type>Checkbox</type>
+</CustomField>

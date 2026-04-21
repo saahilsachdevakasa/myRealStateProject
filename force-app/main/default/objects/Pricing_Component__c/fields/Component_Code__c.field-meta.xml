@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Component_Code__c</fullName>
+    <label>Component Code</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>BSP</fullName><default>false</default><label>BSP</label></value>
+            <value><fullName>PLC_FLOOR</fullName><default>false</default><label>PLC_FLOOR</label></value>
+            <value><fullName>PLC_CORNER</fullName><default>false</default><label>PLC_CORNER</label></value>
+            <value><fullName>PLC_PARK</fullName><default>false</default><label>PLC_PARK</label></value>
+            <value><fullName>EDC</fullName><default>false</default><label>EDC</label></value>
+            <value><fullName>IDC</fullName><default>false</default><label>IDC</label></value>
+            <value><fullName>IFMS</fullName><default>false</default><label>IFMS</label></value>
+            <value><fullName>CLUB</fullName><default>false</default><label>CLUB</label></value>
+            <value><fullName>PKG</fullName><default>false</default><label>PKG</label></value>
+            <value><fullName>PKG_O</fullName><default>false</default><label>PKG_O</label></value>
+            <value><fullName>PWR</fullName><default>false</default><label>PWR</label></value>
+            <value><fullName>GST</fullName><default>false</default><label>GST</label></value>
+            <value><fullName>STMP</fullName><default>false</default><label>STMP</label></value>
+            <value><fullName>REGN</fullName><default>false</default><label>REGN</label></value>
+            <value><fullName>TDS</fullName><default>false</default><label>TDS</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
