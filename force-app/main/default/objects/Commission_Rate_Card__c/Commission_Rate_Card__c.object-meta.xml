@@ -18,5 +18,6 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Commission Rate Cards</pluralLabel>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Read</sharingModel>
+    <externalSharingModel>Private</externalSharingModel>
 </CustomObject>

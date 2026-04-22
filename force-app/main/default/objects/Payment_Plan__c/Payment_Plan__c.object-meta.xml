@@ -17,5 +17,6 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Payment Plans</pluralLabel>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Read</sharingModel>
+    <externalSharingModel>Private</externalSharingModel>
 </CustomObject>

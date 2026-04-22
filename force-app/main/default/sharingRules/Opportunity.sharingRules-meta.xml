@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>CP_Sourced_Opps_To_CP_Manager</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Read-only visibility of CP-sourced Opportunities to the CP Manager role and subordinates, for performance attribution. Filters on Source_Channel__c=CP (Picklist) instead of the Lookup Source_CP__c, since Lookup-to-Account fields are rejected by sharing rule criteria.</description>
+        <label>CP-Sourced Opportunities To CP Manager</label>
+        <sharedTo>
+            <roleAndSubordinates>RECRM_CP_Manager</roleAndSubordinates>
+        </sharedTo>
+        <criteriaItems>
+            <field>Source_Channel__c</field>
+            <operation>equals</operation>
+            <value>CP</value>
+        </criteriaItems>
+    </sharingCriteriaRules>
+</SharingRules>

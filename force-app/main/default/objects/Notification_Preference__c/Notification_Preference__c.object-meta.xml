@@ -18,5 +18,6 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Notification Preferences</pluralLabel>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Private</sharingModel>
+    <externalSharingModel>Private</externalSharingModel>
 </CustomObject>

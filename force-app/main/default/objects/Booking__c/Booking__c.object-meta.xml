@@ -18,5 +18,6 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Bookings</pluralLabel>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Private</sharingModel>
+    <externalSharingModel>Private</externalSharingModel>
 </CustomObject>

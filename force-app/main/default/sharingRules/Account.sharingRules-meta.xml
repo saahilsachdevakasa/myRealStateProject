@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>CP_Accounts_Visible_To_RECRM</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>None</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>None</opportunityAccessLevel>
+        </accountSettings>
+        <description>Share CP-record-type Accounts with all internal RECRM roles (CEO and subordinates = the entire RECRM hierarchy). Account OWD is Private to protect Buyer records; this rule re-opens CP records since CP master is internal reference data.</description>
+        <label>CP Accounts Visible To RECRM</label>
+        <sharedTo>
+            <roleAndSubordinates>RECRM_CEO</roleAndSubordinates>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Channel Partner</value>
+        </criteriaItems>
+    </sharingCriteriaRules>
+</SharingRules>

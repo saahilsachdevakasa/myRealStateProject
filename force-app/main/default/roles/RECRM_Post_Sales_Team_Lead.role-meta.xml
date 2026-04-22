@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Role xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseAccessLevel>Edit</caseAccessLevel>
+    <contactAccessLevel>Edit</contactAccessLevel>
+    <mayForecastManagerShare>false</mayForecastManagerShare>
+    <name>RECRM Post Sales Team Lead</name>
+    <opportunityAccessLevel>Read</opportunityAccessLevel>
+    <parentRole>RECRM_Head_Of_Post_Sales</parentRole>
+</Role>
