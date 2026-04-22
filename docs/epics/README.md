@@ -39,6 +39,8 @@ Every epic file contains:
 - **Implementation notes** — patterns or edge cases to watch
 - **Implemented** (filled post-build) — summary of what was produced
 
+Do not embed commit SHAs in the Implemented section. Use `git log --grep='E0X'` to find the commits. Embedding SHAs creates a self-reference paradox when docs are amended.
+
 ## Status
 
 Currently: **no epic files drafted**. E01 will be drafted next.

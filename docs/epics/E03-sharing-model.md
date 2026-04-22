@@ -128,8 +128,8 @@ See **Implemented** below.
 ## Implemented
 
 **Commits**
-- `62f463d` — feat(E03): role hierarchy, OWD tightening, sharing rules
-- `488c74d` — docs(E03): epic spec with implementation record
+See `git log --grep='E03'` for the commits that implemented this epic.
+(SHAs not embedded — amending a commit changes its SHA, so embedded SHAs would always be stale.)
 
 **Deployed to** `re-crm-sdo` on 2026-04-22 across one full-batch deploy
 and one follow-up Contact-only deploy. Verified via SOQL
