@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>Post-Sales Queue</name>
+    <queueMembers>
+        <roles>
+            <role>RECRM_Post_Sales_Team_Lead</role>
+            <role>RECRM_Post_Sales_Exec</role>
+        </roles>
+    </queueMembers>
+    <queueSobject>
+        <sobjectType>Booking__c</sobjectType>
+    </queueSobject>
+</Queue>
