@@ -149,3 +149,23 @@ These are Salesforce metadata-schema quirks discovered during metadata generatio
 11. **Standard-object OWD XMLs on external-sharing-enabled orgs must declare both `<sharingModel>` AND `<externalSharingModel>`.** A file with only `<sharingModel>ControlledByParent</sharingModel>` deploys successfully (Salesforce reports "Changed") but silently coerces to Private because the implied pair (CBP internal / Private external) is invalid. Always write both elements together.
 
 12. **`EntityDefinition.InternalSharingModel` misreports Contact OWD.** For Contact specifically, it surfaces the *effective* sharing (after Account-parent propagation) rather than the *declared* OWD. When Account is Private and Contact is CBP'd to Account, EntityDefinition reports Contact as Private even though the declared OWD in Setup → Sharing Settings is Controlled by Parent. For verification of Contact OWD, use Setup UI, not SOQL. Other standard and custom objects report correctly.
+
+## E04 gotchas (permission sets, queues, users)
+
+13. **`PermissionSet.RecordTypeVisibility` rejects `<default>`.** That element is Profile-only. Permission set RT visibility uses only `<recordType>` and `<visible>`. Salesforce's deploy error: `Element 'default' invalid at this location in type PermissionSetRecordTypeVisibility`.
+
+14. **Read access on a Master-Detail child requires Read on the parent in the same PermissionSet.** Walk this dependency for every object in the persona's scope, **including objects added later in the design**. Late additions are the most common miss — re-run the MD-parent walk whenever an object is added to a persona's scope. Salesforce error: `Permission Read X depends on permission(s): Read Y`.
+
+15. **Required fields have implicit FLS — permission sets must NOT declare `<fieldPermissions>` for them.** Salesforce rejects with `You cannot deploy to a required field: X.Y`. Audit: `grep -l '<required>true</required>' force-app/main/default/objects/<Obj>/fields/*.field-meta.xml`. Also applies (same audit pattern) to MasterDetail, Formula, RollUp, AutoNumber fields — all four categories carry implicit FLS and must be excluded from explicit `<fieldPermissions>` blocks.
+
+16. **Walk required-Lookup targets on every object the persona can READ AND can CREATE/EDIT.** Both surfaces break at runtime without target Read access — read surfaces break record-page rendering (IDs instead of names), edit surfaces break the Lookup picker. **OWD ControlledByParent does NOT substitute for object-level permissions** — OWD governs record-level sharing; the permission set still needs to grant the target object at least Read.
+
+17. **Granting Read on Account requires Read on Contact in the same permission set.** Salesforce-enforced standard-pair rule (Contact OWD = ControlledByParent from Account triggers a bidirectional dependency). Custom MD parent→child dependencies are NOT similarly enforced based on empirical evidence across CP_Manager, Inventory_Admin, and Post_Sales_Exec deploys — granting Read on a custom MD-parent does not require granting Read on its custom MD-children. The rule appears specific to the Account-Contact standard pair. If other standard objects with CBP-from-parent OWD are added to permission sets later (Notes, Tasks, custom-to-standard pairs), test empirically rather than assuming.
+
+18. **`PermissionSet.description` has a 255-character limit.** Unlike most text fields in our metadata, permission set descriptions are short-form. Treat them like UI-surface tooltips, not documentation blocks. Check char count before deploy: `grep '<description>' file | sed 's/.*<description>\(.*\)<\/description>.*/\1/' | awk '{print length}'`.
+
+19. **Queue metadata schema** — three independent quirks in one file:
+    - `<queueMembers>` contains **one** `<roles>` wrapper with multiple `<role>DeveloperName</role>` children (NOT multiple `<roles>` blocks).
+    - Queue-to-object binding uses `<queueSobject><sobjectType>ObjectApiName</sobjectType></queueSobject>`, NOT `<supportedObjects><object>...</object></supportedObjects>`.
+    - `<queueSortOrder>` is not a valid direct child of `<Queue>` despite being mentioned in some external docs.
+    Source format (`.queue-meta.xml`) and MDAPI format (`.queue`) use the same inner element schema. When retrieving a live sample for schema discovery, choose the most complex case available — single-role samples don't reveal the multi-`<role>` nesting rule.
