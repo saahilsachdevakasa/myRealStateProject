@@ -145,3 +145,7 @@ These are Salesforce metadata-schema quirks discovered during metadata generatio
 9. **The standard Name field is declared inside the object XML's `<nameField>` block, not as a separate field file.** When counting custom fields per object, expect spec's total = count of files in `fields/` folder + 1 (for Name).
 
 10. **When a record type references a BusinessProcess, both must deploy in the same deploy and the BusinessProcess's `<values>` must include every stage the record type picklist filter exposes.** Mismatches produce "no BusinessProcess named X.Y found" errors even when the BusinessProcess is in the same deploy.
+
+11. **Standard-object OWD XMLs on external-sharing-enabled orgs must declare both `<sharingModel>` AND `<externalSharingModel>`.** A file with only `<sharingModel>ControlledByParent</sharingModel>` deploys successfully (Salesforce reports "Changed") but silently coerces to Private because the implied pair (CBP internal / Private external) is invalid. Always write both elements together.
+
+12. **`EntityDefinition.InternalSharingModel` misreports Contact OWD.** For Contact specifically, it surfaces the *effective* sharing (after Account-parent propagation) rather than the *declared* OWD. When Account is Private and Contact is CBP'd to Account, EntityDefinition reports Contact as Private even though the declared OWD in Setup → Sharing Settings is Controlled by Parent. For verification of Contact OWD, use Setup UI, not SOQL. Other standard and custom objects report correctly.
