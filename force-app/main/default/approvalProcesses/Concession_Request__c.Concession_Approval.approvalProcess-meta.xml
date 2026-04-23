@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>true</allowRecall>
+    <allowedSubmitters>
+        <type>owner</type>
+    </allowedSubmitters>
+    <approvalPageFields>
+        <field>Name</field>
+        <field>Opportunity__c</field>
+        <field>Unit__c</field>
+        <field>Requested_Pct__c</field>
+        <field>Requested_Amount__c</field>
+        <field>Justification__c</field>
+        <field>Requested_By__c</field>
+    </approvalPageFields>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <name>psm.prk@recrm-demo.invalid</name>
+                <type>user</type>
+            </approver>
+            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
+        </assignedApprover>
+        <description>Tier 1 — PSM approves concessions up to and including 5%.</description>
+        <entryCriteria>
+            <criteriaItems>
+                <field>Concession_Request__c.Requested_Pct__c</field>
+                <operation>lessOrEqual</operation>
+                <value>5</value>
+            </criteriaItems>
+        </entryCriteria>
+        <ifCriteriaNotMet>GoToNextStep</ifCriteriaNotMet>
+        <label>PSM Tier (≤5%)</label>
+        <name>PSM_Tier</name>
+        <rejectBehavior>
+            <type>RejectRequest</type>
+        </rejectBehavior>
+    </approvalStep>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <name>saleshead@recrm-demo.invalid</name>
+                <type>user</type>
+            </approver>
+            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
+        </assignedApprover>
+        <description>Tier 2 — Sales Head approves concessions above 5%.</description>
+        <entryCriteria>
+            <criteriaItems>
+                <field>Concession_Request__c.Requested_Pct__c</field>
+                <operation>greaterThan</operation>
+                <value>5</value>
+            </criteriaItems>
+        </entryCriteria>
+        <label>Sales Head Tier (&gt;5%)</label>
+        <name>Sales_Head_Tier</name>
+        <rejectBehavior>
+            <type>RejectRequest</type>
+        </rejectBehavior>
+    </approvalStep>
+    <description>Concession Request approval — 2-tier (PSM ≤5%, Sales Head &gt;5%) per Phase 1 Architecture Section 5.4. Step 1 approver psm.prk; Step 2 approver saleshead. Specific-user assignment used in lieu of Manager-hierarchy lookup since demo users have no Manager set.</description>
+    <enableMobileDeviceAccess>true</enableMobileDeviceAccess>
+    <entryCriteria>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>Concession_Request__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Draft</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Concession_Request__c.Status__c</field>
+            <operation>equals</operation>
+            <value>PSM Review</value>
+        </criteriaItems>
+    </entryCriteria>
+    <finalApprovalActions>
+        <action>
+            <name>Set_Status_Approved</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Set_Approved_Pct</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Set_Approval_Date</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>Set_Expiry_Date</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalApprovalRecordLock>true</finalApprovalRecordLock>
+    <finalRejectionActions>
+        <action>
+            <name>Set_Status_Rejected</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalRejectionActions>
+    <finalRejectionRecordLock>false</finalRejectionRecordLock>
+    <initialSubmissionActions>
+        <action>
+            <name>Set_Status_PSM_Review</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Concession Approval</label>
+    <recordEditability>AdminOrCurrentApprover</recordEditability>
+</ApprovalProcess>

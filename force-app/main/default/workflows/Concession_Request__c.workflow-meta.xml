@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Set_Approval_Date</fullName>
+        <description>Approval-process Final Approval action — stamp Approval_Date__c with TODAY().</description>
+        <field>Approval_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Set Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Approved_Pct</fullName>
+        <description>Approval-process Final Approval action — copy Requested_Pct__c into Approved_Pct__c.</description>
+        <field>Approved_Pct__c</field>
+        <formula>Requested_Pct__c</formula>
+        <name>Set Approved Pct from Requested</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Expiry_Date</fullName>
+        <description>Approval-process Final Approval action — set Expiry_Date__c to TODAY() + 7 (one-week window).</description>
+        <field>Expiry_Date__c</field>
+        <formula>TODAY() + 7</formula>
+        <name>Set Expiry Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Status_Approved</fullName>
+        <description>Approval-process Final Approval action — set Status__c to Approved.</description>
+        <field>Status__c</field>
+        <literalValue>Approved</literalValue>
+        <name>Set Status to Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Status_PSM_Review</fullName>
+        <description>Approval-process Initial Submission action — set Status__c to PSM Review.</description>
+        <field>Status__c</field>
+        <literalValue>PSM Review</literalValue>
+        <name>Set Status to PSM Review</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Status_Rejected</fullName>
+        <description>Approval-process Final Rejection action — set Status__c to Rejected.</description>
+        <field>Status__c</field>
+        <literalValue>Rejected</literalValue>
+        <name>Set Status to Rejected</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>
