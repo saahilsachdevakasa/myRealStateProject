@@ -100,6 +100,30 @@ public class TestDataFactory {
         return units;
     }
 
+    public static Account createAccount(Map<String, Object> overrides) {
+        Id buyerRtId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Buyer').getRecordTypeId();
+        Account a = new Account(
+            Name = 'Test Buyer',
+            RecordTypeId = buyerRtId,
+            Phone = '9820000001'
+        );
+        applyOverrides(a, overrides);
+        insert a;
+        return a;
+    }
+
+    public static Opportunity createOpportunity(Id accountId, Map<String, Object> overrides) {
+        Opportunity o = new Opportunity(
+            Name = 'Test Opportunity',
+            StageName = 'New',
+            CloseDate = Date.today().addDays(90),
+            AccountId = accountId
+        );
+        applyOverrides(o, overrides);
+        insert o;
+        return o;
+    }
+
     public static User createUser(String profileName, Map<String, Object> overrides) {
         Profile prof = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1];
         String unique = String.valueOf(System.currentTimeMillis());

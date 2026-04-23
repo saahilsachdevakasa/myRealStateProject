@@ -6,6 +6,6 @@
     <referenceTo>Payment_Plan__c</referenceTo>
     <relationshipLabel>Bookings</relationshipLabel>
     <relationshipName>Bookings</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <type>Lookup</type>
 </CustomField>
