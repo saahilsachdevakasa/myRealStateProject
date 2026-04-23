@@ -30,6 +30,13 @@ public with sharing class UnitBlockingService {
             if (!unitsById.containsKey(r.unitId)) {
                 throw new AuraHandledException('Unit not found.');
             }
+            Unit__c current = unitsById.get(r.unitId);
+            if (current.Unit_Status__c != 'Available' && current.Unit_Status__c != 'Blocked') {
+                throw new AuraHandledException(
+                    'Cannot block unit ' + r.unitId + ': current status is ' + current.Unit_Status__c +
+                    '. Only Available or Blocked units can be blocked.'
+                );
+            }
             toUpdate.add(new Unit__c(
                 Id = r.unitId,
                 Unit_Status__c = 'Blocked',

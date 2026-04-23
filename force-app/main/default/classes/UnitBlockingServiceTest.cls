@@ -88,6 +88,29 @@ public class UnitBlockingServiceTest {
     }
 
     @IsTest
+    static void testBlockUnit_BookedUnit_Rejected() {
+        Tower__c tower = [SELECT Id FROM Tower__c LIMIT 1];
+        Unit__c unit = TestDataFactory.createUnit(tower.Id, new Map<String, Object>{
+            'Unit_Status__c' => 'Booked'
+        });
+
+        UnitBlockingService.BlockRequest req = new UnitBlockingService.BlockRequest();
+        req.unitId = unit.Id;
+        req.durationHours = 72;
+
+        Boolean caught = false;
+        Test.startTest();
+        try {
+            UnitBlockingService.blockUnit(new List<UnitBlockingService.BlockRequest>{ req });
+        } catch (AuraHandledException e) {
+            caught = true;
+        }
+        Test.stopTest();
+
+        System.assert(caught, 'Expected AuraHandledException when trying to block a Booked unit');
+    }
+
+    @IsTest
     static void testBlockUnit_AlreadyBlocked() {
         Tower__c tower = [SELECT Id FROM Tower__c LIMIT 1];
         Unit__c unit = TestDataFactory.createUnit(tower.Id, new Map<String, Object>{
