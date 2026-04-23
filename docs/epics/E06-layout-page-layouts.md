@@ -269,12 +269,126 @@ See `git log --grep='E06-layout'` for the commits that implemented
 this epic (two: feat for the 29 layouts, docs for this file +
 CLAUDE.md gotchas).
 
+## Phase 2 — Lightning Record Pages (Flexipages)
+
+Phase 1 delivered page layouts for all 26 objects. Phase 2 adds
+**Lightning Record Pages (flexipages)** for the 22 custom objects,
+so each object has a proper record view with header + tabbed
+content + related lists (rather than relying on Salesforce's
+auto-generated record page).
+
+### In scope
+
+22 custom-object flexipages, all using `flexipage:recordHomeTemplateDesktop`
+as the base template. Each page has:
+
+- **Header** region — `force:highlightsPanel`
+- **Main** region — `flexipage:tabset` pointing to a tab facet with:
+  - **Details** tab → `force:detailPanel` (renders the page layout
+    we deployed in Phase 1)
+  - **Related** tab → `force:relatedListContainer`
+  - **Activity** tab (only on 6 objects where RMs log activities) →
+    `runtime_sales_activities:activityPanel`
+
+**Objects with Activity tab (6):** Booking__c, Demand__c,
+Agreement__c, Possession__c, Concession_Request__c, Site_Visit__c.
+
+**Objects without Activity tab (16):** Project__c, Tower__c,
+Unit__c, Pricing_Component__c, Booking_Customer__c, Payment_Plan__c,
+Payment_Plan_Milestone__c, Booking_Payment_Schedule__c, Receipt__c,
+Receipt_Allocation__c, Snag_Item__c, Commission_Rate_Card__c,
+Commission_Ledger__c, Commission_Payout__c, Document_Checklist__c,
+Notification_Preference__c.
+
+### Out of scope (deferred)
+
+- **Dynamic Forms** (stage/status-based conditional section
+  visibility on Opportunity, Booking, Unit, Agreement, Possession).
+  The page layouts deployed in Phase 1 are rendered via Record
+  Detail; Dynamic Forms rewires that to per-section Field visibility
+  rules. Value: cleaner UX. Cost: flexipage XML balloons to
+  400-800 lines per object with `<visibilityRule>` + `<criteria>`
+  chains. Defer to a UX polish epic.
+- **Path component on Opportunity** (shows the current stage visually).
+  PathAssistants already exist from E06b, but placing the Path
+  component requires either modifying the SDO's existing
+  `Opportunity_Record_Page` flexipage (risky — it has SDO-specific
+  components we don't want to lose) or creating a new Opportunity
+  flexipage and assigning it as org default (overwrites the SDO
+  default). Defer; may render automatically on the SDO's default
+  Opp page if the SDO template includes a Path region.
+- **Standard-object flexipages** (Lead, Account, Contact,
+  Opportunity) — the SDO's existing flexipages for these objects
+  already render our updated page layouts via their embedded
+  Record Detail / force:detailPanel components. No flexipage work
+  needed.
+
+### Files produced
+
+22 new flexipages in `force-app/main/default/flexipages/`:
+`Agreement_Record_Page`, `Booking_Customer_Record_Page`,
+`Booking_Payment_Schedule_Record_Page`, `Booking_Record_Page`,
+`Commission_Ledger_Record_Page`, `Commission_Payout_Record_Page`,
+`Commission_Rate_Card_Record_Page`, `Concession_Request_Record_Page`,
+`Demand_Record_Page`, `Document_Checklist_Record_Page`,
+`Notification_Preference_Record_Page`,
+`Payment_Plan_Milestone_Record_Page`, `Payment_Plan_Record_Page`,
+`Possession_Record_Page`, `Pricing_Component_Record_Page`,
+`Project_Record_Page`, `Receipt_Allocation_Record_Page`,
+`Receipt_Record_Page`, `Site_Visit_Record_Page`,
+`Snag_Item_Record_Page`, `Tower_Record_Page`, `Unit_Record_Page`.
+
+All 114 lines (16 simple) or 143 lines (6 with Activity tab).
+
+### Iteration story (Phase 2)
+
+Four dry-run retries to get the flexipage XML right:
+
+| Attempt | Failure | Fix |
+|---|---|---|
+| Dry-run 1 | All 22 rejected: `Cannot create a new component with the namespace: Booking_Customer` | Filename `{Object}__c_Record_Page.flexipage-meta.xml` parses the `__c` as a namespace separator. Renamed to `{Object}_Record_Page` (no `__c`). Gotcha #36. |
+| Dry-run 2 | All 22 rejected: `The 'sidebar' region specifies mode 'REPLACE' but a parent region enabling that mode doesn't exist` | Template `recordHomeTemplateDesktop` doesn't expose a `sidebar` region to write. Removed sidebar block entirely. |
+| Dry-run 3 | All 22 rejected: same error, now on `detailTabContent` Facet | Facets don't support `<mode>Replace</mode>` at all — it's only meaningful for overriding a parent template's regions. Removed `<mode>` from all Facets. |
+| Dry-run 4 | All 22 rejected: same error, now on `header` Region | Standalone flexipages (no `<parentFlexiPage>`) can't use `<mode>Replace</mode>` on any region, including top-level Regions. Removed `<mode>` from all regions. Gotchas #37 + #38. |
+| Dry-run 5 | — | Green: 22/22 Created |
+| Real deploy | — | Green: 22/22 Created, 8.5s |
+
+### Manual Setup steps (Phase 2 addendum)
+
+For each of the 22 custom objects, a one-time Setup UI step to
+activate the flexipage as the org-default record page:
+
+1. Setup → Object Manager → `<Object>` → **Lightning Record Pages**
+2. Click the `{Object} Record Page` entry
+3. Click **Activation** (button at top right)
+4. Tab: **Org Default**
+5. Click **Assign as Org Default**
+6. Select both **Desktop** and **Phone** form factors, click Next → Save
+7. Repeat for each of the 22 custom objects
+
+Alternative (if time-permitting): an Apex script using the Tooling
+API can programmatically assign each flexipage as org default.
+Deferred — 22 Setup UI clicks is a one-time cost per SDO refresh.
+
+### Acceptance criteria (Phase 2 additions)
+
+6. **22 custom-object flexipages deployed** — verified via Tooling
+   API query (`FlexiPage` table, 22 new rows with
+   `DeveloperName LIKE '%_Record_Page'`).
+7. **Each flexipage renders its object's page layout** via
+   `force:detailPanel` — manual Sahil verification post-Setup UI
+   assignment.
+8. **Activity tab renders on the 6 activity-enabled objects** —
+   manual verification. Activities must be enabled on the object
+   for the tab to work (`<enableActivities>true</enableActivities>`
+   in the object XML — verify before trusting Activity tab).
+
 ## Known follow-ups
 
-- **Flexipages with Dynamic Forms** (dedicated future epic) —
+- **Flexipage Dynamic Forms** (dedicated future epic) —
   Opportunity, Booking, Unit, Agreement, Possession get conditional
   section visibility. Also: Path component placement on
-  Opportunity record pages.
+  Opportunity record pages (Path exists from E06b, not yet placed).
 - **Block Unit Screen Flow + Quick Action** (still deferred
   from E06c).
 - **Persona permission set layout visibility audit** — E05b handled
@@ -288,3 +402,7 @@ CLAUDE.md gotchas).
   layout together" discipline from E05b (gotcha #27).
 - **Currency locale** and other org-level settings — manual Setup
   step, done once per SDO refresh.
+- **Flexipage assignment automation** — if the 22-click manual
+  assignment becomes painful at SDO refresh time, write a one-off
+  Apex/Tooling-API script to batch-assign flexipages as org defaults.
+  `scripts/assign-flexipages.apex` is the obvious landing spot.
