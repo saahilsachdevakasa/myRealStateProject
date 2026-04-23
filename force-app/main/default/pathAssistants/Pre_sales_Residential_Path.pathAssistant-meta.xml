@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Pre-sales Residential Path</masterLabel>
+    <pathAssistantSteps>
+        <info>Qualify the lead — confirm budget, configuration preference, and timeline.</info>
+        <picklistValueName>New</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Schedule a site visit. Ensure Project is selected.</info>
+        <picklistValueName>Qualified</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Prepare site visit brief. Confirm date with buyer.</info>
+        <picklistValueName>Site Visit Scheduled</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Capture visit outcome. Identify primary unit of interest.</info>
+        <picklistValueName>Site Visit Done</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Present pricing. Discuss concessions if needed.</info>
+        <picklistValueName>Negotiation</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Collect Expression of Interest amount. Confirm unit selection.</info>
+        <picklistValueName>EOI</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Token received. Prepare for booking confirmation.</info>
+        <picklistValueName>Token Paid</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Booking confirmed. Post-sales team takes over.</info>
+        <picklistValueName>Closed Won (Booked)</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <info>Document the reason. Update for pipeline reporting.</info>
+        <picklistValueName>Closed Lost</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Pre_sales_Residential</recordTypeName>
+</PathAssistant>

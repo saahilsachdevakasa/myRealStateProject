@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Unit_By_Negotiation</fullName>
+    <active>true</active>
+    <description>Primary Unit of Interest must be populated once the opportunity enters Negotiation or any downstream stage.</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(StageName),
+    OR(
+        ISPICKVAL(StageName, 'Negotiation'),
+        ISPICKVAL(StageName, 'EOI'),
+        ISPICKVAL(StageName, 'Token Paid'),
+        ISPICKVAL(StageName, 'Closed Won (Booked)')
+    ),
+    ISBLANK(Primary_Unit__c)
+)</errorConditionFormula>
+    <errorMessage>Primary Unit of Interest is required before entering Negotiation.</errorMessage>
+</ValidationRule>

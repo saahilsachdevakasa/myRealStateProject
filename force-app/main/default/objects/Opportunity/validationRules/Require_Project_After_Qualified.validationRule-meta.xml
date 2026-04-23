@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Project_After_Qualified</fullName>
+    <active>true</active>
+    <description>Project must be populated once stage advances past Qualified. Exempts New and Qualified so early-stage leads can be captured without project selection.</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(StageName),
+    NOT(ISPICKVAL(StageName, 'New')),
+    NOT(ISPICKVAL(StageName, 'Qualified')),
+    ISBLANK(Project__c)
+)</errorConditionFormula>
+    <errorMessage>Project is required once an opportunity advances past Qualified.</errorMessage>
+</ValidationRule>
