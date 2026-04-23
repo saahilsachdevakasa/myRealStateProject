@@ -169,3 +169,13 @@ These are Salesforce metadata-schema quirks discovered during metadata generatio
     - Queue-to-object binding uses `<queueSobject><sobjectType>ObjectApiName</sobjectType></queueSobject>`, NOT `<supportedObjects><object>...</object></supportedObjects>`.
     - `<queueSortOrder>` is not a valid direct child of `<Queue>` despite being mentioned in some external docs.
     Source format (`.queue-meta.xml`) and MDAPI format (`.queue`) use the same inner element schema. When retrieving a live sample for schema discovery, choose the most complex case available — single-role samples don't reveal the multi-`<role>` nesting rule.
+
+## E05 gotchas (assignment rules, approval processes, flows)
+
+20. **ApprovalStep `<assignedApprover>` requires `<whenMultipleApprovers>` (FirstResponse | Unanimous) even with a single approver.** Salesforce's deploy error is exactly: `Because approval step X has multiple approvers, the assignedApprover requires a whenMultipleApprovers value.` Misleading wording — it fires even when there's only one `<approver>` child. The element is structurally required; the value is irrelevant when only one approver exists. Use `FirstResponse` as the safe default.
+
+21. **Newly-deployed fields have no FLS by default.** Setup UI bypasses FLS for admins; SOQL via API does not. Symptoms: Setup UI shows the field, `FieldDefinition` and direct SOQL both return "as if not there". Distinguish from missing-field by checking Setup UI. Mitigation: grant FLS in persona permission sets at field deploy time. Assignment rules and other metadata-validation contexts don't require FLS on the deploying user — this bites SOQL verification queries, not metadata deploy validation.
+
+22. **ApprovalStep requires `<rejectBehavior><type>RejectRequest|RejectStep</type></rejectBehavior>`.** No default. Same polymorphic-container pattern as #20. For 2-tier binary approvals with no kickback, `RejectRequest` on every step is correct. Element position: alphabetical, between `<name>` and `</approvalStep>`.
+
+23. **Assignment rule criteria cannot traverse Lookup `__r` references.** Symptom: `In field: field - no CustomField named X.Y__r.Z__c found`. Workaround: create a Formula(Text) field on the source object that returns the cross-object value (e.g., `Project_Code_Text__c = Project_Interest__r.Project_Code__c` on Lead), deploy that field first as a mini-deploy, then route assignment-rule criteria on the formula field. Same workaround applies to other workflow-style criteria contexts that share the same field-validation engine.
