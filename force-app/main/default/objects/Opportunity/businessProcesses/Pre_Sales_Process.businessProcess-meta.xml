@@ -2,7 +2,7 @@
 <BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Pre_Sales_Process</fullName>
     <description>Pre-sales funnel for residential and commercial opportunities.</description>
-    <isActive>true</isActive>
+    <isActive>false</isActive>
     <values>
         <fullName>Qualification</fullName>
     </values>
