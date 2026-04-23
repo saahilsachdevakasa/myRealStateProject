@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>standard-home</defaultLandingTab>
+    <description>Post-sales focused app for post-sales executives — booking through possession.</description>
+    <formFactors>Large</formFactors>
+    <formFactors>Small</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>Post-Sales CRM</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>Booking__c</tabs>
+    <tabs>Booking_Payment_Schedule__c</tabs>
+    <tabs>Demand__c</tabs>
+    <tabs>Receipt__c</tabs>
+    <tabs>Agreement__c</tabs>
+    <tabs>Possession__c</tabs>
+    <tabs>Concession_Request__c</tabs>
+    <tabs>standard-report</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>
