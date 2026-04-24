@@ -2,7 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Agreement Details</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -36,7 +36,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Document</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -58,7 +58,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>E-Sign</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -84,7 +84,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Registration</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -114,7 +114,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>System Information</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>

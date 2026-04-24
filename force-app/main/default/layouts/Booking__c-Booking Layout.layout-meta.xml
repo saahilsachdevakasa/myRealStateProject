@@ -2,7 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Booking Summary</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -52,7 +52,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Payment Plan</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -70,7 +70,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Financials</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -108,7 +108,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Collections</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -130,7 +130,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Compliance</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -152,7 +152,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Lifecycle</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -182,7 +182,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Cancellation</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -204,7 +204,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Notes</label>
         <style>OneColumn</style>
         <layoutColumns>
@@ -216,7 +216,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>System Information</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>

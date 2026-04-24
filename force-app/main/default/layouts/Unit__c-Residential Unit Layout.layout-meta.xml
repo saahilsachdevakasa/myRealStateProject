@@ -2,7 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Unit Identity</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -36,7 +36,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Identity (System)</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -54,7 +54,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Area</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -76,7 +76,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Pricing</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -106,7 +106,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Attributes</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -132,7 +132,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Status</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -162,7 +162,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Audit</label>
         <style>OneColumn</style>
         <layoutColumns>
@@ -174,7 +174,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>System Information</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>

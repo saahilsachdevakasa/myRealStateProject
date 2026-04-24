@@ -3,7 +3,7 @@
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Lead Information</label>
         <layoutColumns>
@@ -96,7 +96,7 @@
     </layoutSections>
     <layoutSections>
         <customLabel>false</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Description Information</label>
         <layoutColumns>
@@ -109,7 +109,7 @@
     </layoutSections>
     <layoutSections>
         <customLabel>false</customLabel>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>System Information</label>
         <layoutColumns>
@@ -156,7 +156,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>RE CRM — Source &amp; Interest</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -190,7 +190,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>RE CRM — Buyer Profile</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -228,7 +228,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>RE CRM — Agent Scoring</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>

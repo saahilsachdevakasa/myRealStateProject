@@ -2,7 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Component</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -28,7 +28,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Calculation</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -58,7 +58,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>Tax</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
@@ -80,7 +80,7 @@
     </layoutSections>
     <layoutSections>
         <editHeading>true</editHeading>
-        <detailHeading>false</detailHeading>
+        <detailHeading>true</detailHeading>
         <label>System Information</label>
         <style>TwoColumnsTopToBottom</style>
         <layoutColumns>
