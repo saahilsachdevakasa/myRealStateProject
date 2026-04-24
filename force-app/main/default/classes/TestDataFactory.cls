@@ -244,6 +244,30 @@ public class TestDataFactory {
         return a;
     }
 
+    public static Possession__c createPossession(Id bookingId, Map<String, Object> overrides) {
+        Possession__c p = new Possession__c(
+            Booking__c = bookingId,
+            Status__c = 'Ready to Offer'
+        );
+        applyOverrides(p, overrides);
+        insert p;
+        return p;
+    }
+
+    public static Snag_Item__c createSnagItem(Id possessionId, Map<String, Object> overrides) {
+        Snag_Item__c s = new Snag_Item__c(
+            Possession__c = possessionId,
+            Description__c = 'Test snag item',
+            Reported_Date__c = Date.today(),
+            Category__c = 'Plumbing',
+            Severity__c = 'Minor',
+            Status__c = 'Open'
+        );
+        applyOverrides(s, overrides);
+        insert s;
+        return s;
+    }
+
     public static User createUser(String profileName, Map<String, Object> overrides) {
         Profile prof = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1];
         String unique = String.valueOf(System.currentTimeMillis());
