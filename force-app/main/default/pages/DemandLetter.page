@@ -1,0 +1,137 @@
+<apex:page controller="DemandLetterController"
+           renderAs="pdf"
+           applyHtmlTag="true"
+           applyBodyTag="true"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false"
+           cache="false">
+<head>
+<style type="text/css">
+    @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+    body { font-family: Arial, sans-serif; font-size: 11pt; color: #222; }
+    h1 { font-size: 16pt; margin: 0 0 4pt 0; color: #1a3a6c; }
+    h2 { font-size: 13pt; margin: 12pt 0 4pt 0; color: #1a3a6c; }
+    .small { font-size: 9pt; color: #555; }
+    .right { text-align: right; }
+    .header-table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
+    .header-table td { vertical-align: top; }
+    .info-table { width: 100%; border-collapse: collapse; margin: 6pt 0; }
+    .info-table td { padding: 3pt 6pt; vertical-align: top; }
+    .info-table .label { width: 30%; color: #555; }
+    .amount-table { width: 100%; border-collapse: collapse; margin: 8pt 0; }
+    .amount-table th, .amount-table td { border: 1px solid #ccc; padding: 5pt 8pt; }
+    .amount-table th { background: #f0f4fa; text-align: left; }
+    .amount-table .amt { text-align: right; }
+    .total-row td { background: #f0f4fa; font-weight: bold; }
+    .footer { margin-top: 24pt; border-top: 1px solid #ccc; padding-top: 8pt; font-size: 9pt; color: #666; }
+    .signature-block { margin-top: 36pt; }
+</style>
+</head>
+<body>
+
+<table class="header-table">
+    <tr>
+        <td>
+            <h1>{!project.Name}</h1>
+            <div class="small">RERA: {!project.RERA_Number__c} ({!project.RERA_State__c})</div>
+        </td>
+        <td class="right">
+            <div class="small">Demand Letter</div>
+            <div><b>{!demand.Name}</b></div>
+            <div class="small">Raised: <apex:outputText value="{0,date,dd MMM yyyy}"><apex:param value="{!demand.Raised_Date__c}"/></apex:outputText></div>
+        </td>
+    </tr>
+</table>
+
+<h2>To</h2>
+<div>
+    <b>{!buyerName}</b><br/>
+    <apex:outputText rendered="{!NOT(ISBLANK(buyer.BillingStreet))}">{!buyer.BillingStreet}<br/></apex:outputText>
+    <apex:outputText rendered="{!NOT(ISBLANK(buyer.BillingCity))}">{!buyer.BillingCity}, {!buyer.BillingState} {!buyer.BillingPostalCode}</apex:outputText>
+</div>
+
+<h2>Booking Details</h2>
+<table class="info-table">
+    <tr>
+        <td class="label">Booking #</td><td>{!booking.Name}</td>
+        <td class="label">Booking Date</td>
+        <td><apex:outputText value="{0,date,dd MMM yyyy}"><apex:param value="{!booking.Booking_Date__c}"/></apex:outputText></td>
+    </tr>
+    <tr>
+        <td class="label">Unit</td><td colspan="3">{!unitDisplay}</td>
+    </tr>
+    <tr>
+        <td class="label">Super Built-up Area</td><td>{!unit.Super_BuiltUp_Area_sqft__c} sq.ft</td>
+        <td class="label">Carpet Area</td><td>{!unit.Carpet_Area_sqft__c} sq.ft</td>
+    </tr>
+</table>
+
+<h2>Demand Particulars</h2>
+<table class="info-table">
+    <tr>
+        <td class="label">Demand Sequence</td><td>{!demand.Demand_Seq__c}</td>
+        <td class="label">Due Date</td>
+        <td><apex:outputText value="{0,date,dd MMM yyyy}"><apex:param value="{!demand.Due_Date__c}"/></apex:outputText></td>
+    </tr>
+    <tr>
+        <td class="label">Milestone</td><td colspan="3">{!milestoneLabel} ({!schedule.Percentage__c}%)</td>
+    </tr>
+</table>
+
+<h2>Amount Payable</h2>
+<table class="amount-table">
+    <tr>
+        <th>Component</th>
+        <th class="amt">Amount (INR)</th>
+    </tr>
+    <tr>
+        <td>Principal</td>
+        <td class="amt"><apex:outputText value="{0, number, ###,##,##0.00}"><apex:param value="{!demand.Principal_Amount__c}"/></apex:outputText></td>
+    </tr>
+    <tr>
+        <td>GST</td>
+        <td class="amt"><apex:outputText value="{0, number, ###,##,##0.00}"><apex:param value="{!demand.GST_Amount__c}"/></apex:outputText></td>
+    </tr>
+    <tr>
+        <td>Less: TDS u/s 194-IA</td>
+        <td class="amt">(<apex:outputText value="{0, number, ###,##,##0.00}"><apex:param value="{!demand.TDS_Amount__c}"/></apex:outputText>)</td>
+    </tr>
+    <tr class="total-row">
+        <td>Net Payable</td>
+        <td class="amt"><apex:outputText value="{0, number, ###,##,##0.00}"><apex:param value="{!demand.Net_Payable__c}"/></apex:outputText></td>
+    </tr>
+</table>
+
+<h2>Payment Instructions</h2>
+<div>
+    Please remit the Net Payable amount to the following account on or before the Due Date:
+</div>
+<table class="info-table">
+    <tr><td class="label">Beneficiary</td><td>{!project.Name} Escrow Account</td></tr>
+    <tr><td class="label">Bank</td><td>HDFC Bank, RERA Escrow Branch</td></tr>
+    <tr><td class="label">Account No.</td><td>XXXXXXXXXXX (refer agreement)</td></tr>
+    <tr><td class="label">IFSC</td><td>HDFC0000000</td></tr>
+    <tr><td class="label">Reference</td><td>{!demand.Name}</td></tr>
+</table>
+
+<div class="signature-block">
+    <table class="header-table">
+        <tr>
+            <td></td>
+            <td class="right">
+                <div>For {!project.Name}</div>
+                <br/><br/>
+                <div><b>Authorised Signatory</b></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="footer">
+    This is a system-generated demand letter. For queries, contact the developer's collections desk quoting reference {!demand.Name}.
+    GST is leviable per the Affordable Housing / Standard rates as applicable; TDS u/s 194-IA is deducted at source where Total Consideration exceeds INR 50 lakh.
+</div>
+
+</body>
+</apex:page>

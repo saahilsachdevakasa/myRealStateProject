@@ -234,6 +234,16 @@ public class TestDataFactory {
         return b;
     }
 
+    public static Agreement__c createAgreement(Id bookingId, Map<String, Object> overrides) {
+        Agreement__c a = new Agreement__c(
+            Booking__c = bookingId,
+            Status__c = 'Not Started'
+        );
+        applyOverrides(a, overrides);
+        insert a;
+        return a;
+    }
+
     public static User createUser(String profileName, Map<String, Object> overrides) {
         Profile prof = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1];
         String unique = String.valueOf(System.currentTimeMillis());
