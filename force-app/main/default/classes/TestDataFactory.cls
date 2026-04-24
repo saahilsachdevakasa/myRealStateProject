@@ -171,6 +171,24 @@ public class TestDataFactory {
         return plan;
     }
 
+    public static Demand__c createDemand(Id bookingId, Id scheduleId, Map<String, Object> overrides) {
+        Demand__c d = new Demand__c(
+            Booking__c = bookingId,
+            Payment_Schedule__c = scheduleId,
+            Demand_Seq__c = 1,
+            Raised_Date__c = Date.today(),
+            Due_Date__c = Date.today().addDays(15),
+            Principal_Amount__c = 100000,
+            GST_Amount__c = 5000,
+            TDS_Amount__c = 1000,
+            Status__c = 'Raised',
+            PDF_Generated__c = false
+        );
+        applyOverrides(d, overrides);
+        insert d;
+        return d;
+    }
+
     public static Booking__c createBooking(Id oppId, Id unitId, Id accountId, Map<String, Object> overrides) {
         Unit__c u = [SELECT Tower__r.Project__r.Project_Code__c FROM Unit__c WHERE Id = :unitId LIMIT 1];
         String projCode = u.Tower__r.Project__r.Project_Code__c;
