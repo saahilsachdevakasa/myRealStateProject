@@ -124,6 +124,72 @@ public class TestDataFactory {
         return o;
     }
 
+    public static Payment_Plan__c createPaymentPlan(Map<String, Object> overrides) {
+        Payment_Plan__c p = new Payment_Plan__c(
+            Name = 'Test Plan',
+            Plan_Code__c = 'TST',
+            Active__c = false,
+            Applicable_Project_Types__c = 'Residential'
+        );
+        applyOverrides(p, overrides);
+        insert p;
+        return p;
+    }
+
+    public static Payment_Plan_Milestone__c createPaymentPlanMilestone(Id planId, Map<String, Object> overrides) {
+        Payment_Plan_Milestone__c m = new Payment_Plan_Milestone__c(
+            Payment_Plan__c = planId,
+            Sequence__c = 1,
+            Trigger__c = 'On Booking',
+            Trigger_Type__c = 'Booking',
+            Percentage__c = 100,
+            Active__c = true,
+            Days_From_Trigger__c = 0
+        );
+        applyOverrides(m, overrides);
+        insert m;
+        return m;
+    }
+
+    public static Payment_Plan__c createPaymentPlanWithMilestones(Integer milestoneCount, Map<String, Object> planOverrides) {
+        Payment_Plan__c plan = createPaymentPlan(planOverrides);
+        Decimal eachPct = (100.0 / milestoneCount).setScale(2);
+        Decimal lastPct = 100 - (eachPct * (milestoneCount - 1));
+        List<Payment_Plan_Milestone__c> ms = new List<Payment_Plan_Milestone__c>();
+        for (Integer i = 1; i <= milestoneCount; i++) {
+            ms.add(new Payment_Plan_Milestone__c(
+                Payment_Plan__c = plan.Id,
+                Sequence__c = i,
+                Trigger__c = 'Milestone ' + i,
+                Trigger_Type__c = 'Time-Based',
+                Days_From_Trigger__c = (i - 1) * 30,
+                Percentage__c = (i == milestoneCount) ? lastPct : eachPct,
+                Active__c = true
+            ));
+        }
+        insert ms;
+        return plan;
+    }
+
+    public static Booking__c createBooking(Id oppId, Id unitId, Id accountId, Map<String, Object> overrides) {
+        Unit__c u = [SELECT Tower__r.Project__r.Project_Code__c FROM Unit__c WHERE Id = :unitId LIMIT 1];
+        String projCode = u.Tower__r.Project__r.Project_Code__c;
+        String yearStr = String.valueOf(Date.today().year()).right(2);
+        String computedName = 'BKG-' + projCode + '-' + yearStr + '-0001';
+
+        Booking__c b = new Booking__c(
+            Name = computedName,
+            Booking_Status__c = 'Confirmed',
+            Booking_Date__c = Date.today(),
+            Opportunity__c = oppId,
+            Unit__c = unitId,
+            Primary_Buyer__c = accountId
+        );
+        applyOverrides(b, overrides);
+        insert b;
+        return b;
+    }
+
     public static User createUser(String profileName, Map<String, Object> overrides) {
         Profile prof = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1];
         String unique = String.valueOf(System.currentTimeMillis());
