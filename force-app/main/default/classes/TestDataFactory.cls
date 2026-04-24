@@ -189,6 +189,32 @@ public class TestDataFactory {
         return d;
     }
 
+    public static Receipt__c createReceipt(Id bookingId, Map<String, Object> overrides) {
+        Receipt__c r = new Receipt__c(
+            Booking__c = bookingId,
+            Receipt_Date__c = Date.today(),
+            Amount__c = 100000,
+            Payment_Mode__c = 'NEFT',
+            Status__c = 'Received',
+            Payer_Name__c = 'Test Payer'
+        );
+        applyOverrides(r, overrides);
+        insert r;
+        return r;
+    }
+
+    public static Receipt_Allocation__c createReceiptAllocation(Id receiptId, Id demandId, Map<String, Object> overrides) {
+        Receipt_Allocation__c a = new Receipt_Allocation__c(
+            Receipt__c = receiptId,
+            Demand__c = demandId,
+            Amount_Allocated__c = 100000,
+            Allocation_Type__c = (demandId == null) ? 'Advance' : 'Towards Demand'
+        );
+        applyOverrides(a, overrides);
+        insert a;
+        return a;
+    }
+
     public static Booking__c createBooking(Id oppId, Id unitId, Id accountId, Map<String, Object> overrides) {
         Unit__c u = [SELECT Tower__r.Project__r.Project_Code__c FROM Unit__c WHERE Id = :unitId LIMIT 1];
         String projCode = u.Tower__r.Project__r.Project_Code__c;
