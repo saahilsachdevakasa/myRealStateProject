@@ -57,7 +57,7 @@
     </standardValue>
     <standardValue>
         <fullName>New</fullName>
-        <default>false</default>
+        <default>true</default>
         <label>New</label>
         <closed>false</closed>
         <forecastCategory>Pipeline</forecastCategory>
