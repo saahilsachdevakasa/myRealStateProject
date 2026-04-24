@@ -154,6 +154,14 @@
             </layoutItems>
         </layoutColumns>
     </layoutSections>
+    <platformActionList>
+        <actionListContext>Record</actionListContext>
+        <platformActionListItems>
+            <actionName>Generate_Demand_Letter</actionName>
+            <actionType>QuickAction</actionType>
+            <sortOrder>0</sortOrder>
+        </platformActionListItems>
+    </platformActionList>
     <relatedLists>
         <fields>NAME</fields>
         <fields>Receipt__c</fields>
