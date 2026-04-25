@@ -1,0 +1,72 @@
+<template>
+    <lightning-card title={unitTitle} icon-name="standard:asset_object">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading unit" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">Unable to load unit data.</div>
+        </template>
+
+        <template if:true={data}>
+            <div class="slds-p-horizontal_medium slds-p-vertical_small">
+                <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                    <span class="slds-m-right_small">
+                        <lightning-badge label={statusLabel} variant={statusVariant}></lightning-badge>
+                    </span>
+                    <template lwc:if={isBlocked}>
+                        <span class="slds-text-body_regular slds-text-color_weak">{countdownDisplay}</span>
+                    </template>
+                    <template lwc:if={isBooked}>
+                        <span class="slds-text-body_regular">
+                            Active Booking:
+                            <strong>&nbsp;{data.activeBookingName}</strong>
+                        </span>
+                    </template>
+                </div>
+
+                <div class="slds-text-title slds-text-color_weak">
+                    {data.projectName} &middot; {data.towerName} &middot; {data.configuration}
+                </div>
+            </div>
+
+            <div class="slds-grid slds-gutters slds-p-horizontal_medium slds-p-vertical_small slds-border_top">
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-title slds-text-color_weak">Carpet</div>
+                    <div class="slds-text-body_regular">{areaCarpet}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-title slds-text-color_weak">Built-up</div>
+                    <div class="slds-text-body_regular">{areaBuiltUp}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-title slds-text-color_weak">Super Built-up</div>
+                    <div class="slds-text-body_regular">{areaSba}</div>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-gutters slds-p-horizontal_medium slds-p-vertical_small slds-border_top">
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-text-title slds-text-color_weak">BSP / sq.ft</div>
+                    <div class="slds-text-body_regular">{bsp}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-text-title slds-text-color_weak">Base Price</div>
+                    <div class="slds-text-heading_small">{basePrice}</div>
+                </div>
+            </div>
+
+            <template lwc:if={badges.length}>
+                <div class="slds-p-around_medium slds-border_top">
+                    <template for:each={badges} for:item="b">
+                        <span key={b.key} class="slds-m-right_x-small">
+                            <lightning-badge label={b.label}></lightning-badge>
+                        </span>
+                    </template>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

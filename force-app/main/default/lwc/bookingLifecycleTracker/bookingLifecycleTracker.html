@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="Booking Lifecycle" icon-name="standard:opportunity">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading lifecycle" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">
+                Unable to load booking lifecycle data.
+            </div>
+        </template>
+
+        <template if:true={data}>
+            <div class="slds-p-horizontal_medium slds-p-vertical_small">
+                <lightning-progress-indicator current-step={currentStatus} type="path" variant="base">
+                    <template for:each={pathSteps} for:item="step">
+                        <lightning-progress-step
+                            key={step.value}
+                            label={step.label}
+                            value={step.value}>
+                        </lightning-progress-step>
+                    </template>
+                </lightning-progress-indicator>
+            </div>
+
+            <div class="slds-p-around_medium slds-grid slds-wrap milestone-grid">
+                <template for:each={milestoneDates} for:item="m">
+                    <div key={m.label} class="slds-col slds-size_1-of-3 slds-p-vertical_x-small slds-p-right_medium">
+                        <div class="slds-text-title slds-text-color_weak">{m.label}</div>
+                        <div class="slds-text-body_regular">{m.dateDisplay}</div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

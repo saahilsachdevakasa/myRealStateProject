@@ -1,0 +1,31 @@
+.donut-wrapper {
+    width: 180px;
+    height: 180px;
+}
+
+.donut {
+    transform: rotate(-90deg);
+}
+
+.donut-pct {
+    font-size: 6px;
+    font-weight: bold;
+    fill: #16325c;
+    transform: rotate(90deg);
+    transform-origin: 21px 21px;
+}
+
+.donut-label {
+    font-size: 3px;
+    fill: #54698d;
+    transform: rotate(90deg);
+    transform-origin: 21px 21px;
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 4px;
+}

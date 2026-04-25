@@ -1,0 +1,68 @@
+<template>
+    <lightning-card title="Payment Timeline" icon-name="custom:custom17">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading timeline" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">Unable to load payment timeline.</div>
+        </template>
+
+        <template if:true={isEmpty}>
+            <div class="slds-p-around_medium slds-text-color_weak">
+                No payment plan attached. Set <i>Payment Plan</i> on this Booking to generate the schedule.
+            </div>
+        </template>
+
+        <template lwc:if={rows.length}>
+            <div class="slds-p-horizontal_medium">
+                <ul class="slds-timeline">
+                    <template for:each={rows} for:item="m">
+                        <li key={m.id} class="slds-timeline__item_expandable slds-p-vertical_x-small">
+                            <div class="slds-grid slds-gutters slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_1-of-12">
+                                    <lightning-badge label={m.sequence}></lightning-badge>
+                                </div>
+                                <div class="slds-col slds-size_4-of-12">
+                                    <div class="slds-text-body_regular">{m.milestoneTrigger}</div>
+                                    <div class="slds-text-title slds-text-color_weak">{m.percentage}% &middot; due {m.expectedDisplay}</div>
+                                </div>
+                                <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+                                    <div class="slds-text-body_regular">{m.scheduledDisplay}</div>
+                                </div>
+                                <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                                    <template lwc:if={m.hasDemand}>
+                                        <div class="slds-text-body_small">{m.receivedDisplay}</div>
+                                    </template>
+                                    <template lwc:else>
+                                        <div class="slds-text-body_small slds-text-color_weak">—</div>
+                                    </template>
+                                </div>
+                                <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                                    <lightning-badge label={m.status} variant={m.statusVariant}></lightning-badge>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+
+            <div slot="footer" class="slds-grid slds-gutters slds-text-body_small">
+                <div class="slds-col slds-size_1-of-3">
+                    <span class="slds-text-color_weak">Scheduled:</span>
+                    <strong>&nbsp;{totalScheduled}</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span class="slds-text-color_weak">Received:</span>
+                    <strong>&nbsp;{totalReceived}</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span class="slds-text-color_weak">Outstanding:</span>
+                    <strong>&nbsp;{outstanding}</strong>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+</template>
