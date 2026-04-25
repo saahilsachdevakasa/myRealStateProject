@@ -17,11 +17,11 @@ export default class BookingLifecycleTracker extends LightningElement {
     wiredData;
 
     get data() {
-        return this.wiredData && this.wiredData.data;
+        return this.wiredData?.data;
     }
 
     get error() {
-        return this.wiredData && this.wiredData.error;
+        return this.wiredData?.error;
     }
 
     get isLoading() {

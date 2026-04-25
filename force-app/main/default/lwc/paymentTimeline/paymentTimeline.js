@@ -17,7 +17,7 @@ export default class PaymentTimeline extends LightningElement {
     wiredData;
 
     get rows() {
-        const data = this.wiredData && this.wiredData.data;
+        const data = this.wiredData?.data;
         if (!data) return [];
         return data.map((m) => ({
             ...m,
@@ -32,15 +32,15 @@ export default class PaymentTimeline extends LightningElement {
     }
 
     get error() {
-        return this.wiredData && this.wiredData.error;
+        return this.wiredData?.error;
     }
 
     get isLoading() {
-        return !this.wiredData || (!this.wiredData.data && !this.wiredData.error);
+        return !this.wiredData?.data && !this.wiredData?.error;
     }
 
     get isEmpty() {
-        return this.wiredData && this.wiredData.data && this.wiredData.data.length === 0;
+        return this.wiredData?.data?.length === 0;
     }
 
     get totalScheduled() {

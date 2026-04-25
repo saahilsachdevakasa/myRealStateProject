@@ -7,17 +7,21 @@ export default class DemandCollectionSummary extends LightningElement {
     @wire(getCollectionData, { bookingId: '$recordId' })
     wiredData;
 
-    get data() { return this.wiredData && this.wiredData.data; }
-    get error() { return this.wiredData && this.wiredData.error; }
+    get data() { return this.wiredData?.data; }
+    get error() { return this.wiredData?.error; }
     get isLoading() { return !this.data && !this.error; }
 
     get isEmpty() {
-        return this.data && this.data.demandCount === 0;
+        return this.data?.demandCount === 0;
     }
 
-    get totalDemanded() { return this.fmt(this.data && this.data.totalNetPayable); }
-    get totalReceived() { return this.fmt(this.data && this.data.totalReceived); }
-    get outstanding() { return this.fmt(this.data && this.data.totalOutstanding); }
+    get hasDemands() {
+        return (this.data?.demandCount ?? 0) > 0;
+    }
+
+    get totalDemanded() { return this.fmt(this.data?.totalNetPayable); }
+    get totalReceived() { return this.fmt(this.data?.totalReceived); }
+    get outstanding() { return this.fmt(this.data?.totalOutstanding); }
 
     get progressPct() {
         const d = this.data;

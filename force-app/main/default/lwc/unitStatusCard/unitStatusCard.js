@@ -31,11 +31,11 @@ export default class UnitStatusCard extends LightningElement {
     }
 
     get data() {
-        return this.wiredData && this.wiredData.data;
+        return this.wiredData?.data;
     }
 
     get error() {
-        return this.wiredData && this.wiredData.error;
+        return this.wiredData?.error;
     }
 
     get isLoading() {

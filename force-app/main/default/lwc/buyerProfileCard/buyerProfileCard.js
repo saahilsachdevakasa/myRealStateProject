@@ -13,8 +13,8 @@ export default class BuyerProfileCard extends LightningElement {
     @wire(getBuyerData, { accountId: '$recordId' })
     wiredData;
 
-    get data() { return this.wiredData && this.wiredData.data; }
-    get error() { return this.wiredData && this.wiredData.error; }
+    get data() { return this.wiredData?.data; }
+    get error() { return this.wiredData?.error; }
     get isLoading() { return !this.data && !this.error; }
 
     get maskedPan() {

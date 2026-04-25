@@ -14,8 +14,8 @@ export default class ProjectInventoryChart extends LightningElement {
     @wire(getInventoryData, { projectId: '$recordId' })
     wiredData;
 
-    get data() { return this.wiredData && this.wiredData.data; }
-    get error() { return this.wiredData && this.wiredData.error; }
+    get data() { return this.wiredData?.data; }
+    get error() { return this.wiredData?.error; }
     get isLoading() { return !this.data && !this.error; }
 
     get isEmpty() {
