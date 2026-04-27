@@ -13,6 +13,7 @@
         <field>Requested_Amount__c</field>
         <field>Justification__c</field>
         <field>Requested_By__c</field>
+        <field>Owner</field>
     </approvalPageFields>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
@@ -31,12 +32,9 @@
                 <value>5</value>
             </criteriaItems>
         </entryCriteria>
-        <ifCriteriaNotMet>GoToNextStep</ifCriteriaNotMet>
+        <ifCriteriaNotMet>GotoNextStep</ifCriteriaNotMet>
         <label>PSM Tier (≤5%)</label>
         <name>PSM_Tier</name>
-        <rejectBehavior>
-            <type>RejectRequest</type>
-        </rejectBehavior>
     </approvalStep>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
@@ -78,7 +76,7 @@
     </entryCriteria>
     <finalApprovalActions>
         <action>
-            <name>Set_Status_Approved</name>
+            <name>Set_Approval_Date</name>
             <type>FieldUpdate</type>
         </action>
         <action>
@@ -86,11 +84,11 @@
             <type>FieldUpdate</type>
         </action>
         <action>
-            <name>Set_Approval_Date</name>
+            <name>Set_Expiry_Date</name>
             <type>FieldUpdate</type>
         </action>
         <action>
-            <name>Set_Expiry_Date</name>
+            <name>Set_Status_Approved</name>
             <type>FieldUpdate</type>
         </action>
     </finalApprovalActions>
@@ -109,5 +107,7 @@
         </action>
     </initialSubmissionActions>
     <label>Concession Approval</label>
+    <processOrder>1</processOrder>
     <recordEditability>AdminOrCurrentApprover</recordEditability>
+    <showApprovalHistory>false</showApprovalHistory>
 </ApprovalProcess>
