@@ -6,6 +6,8 @@ public class AgreementTriggerHandler {
         } else if (operation == TriggerOperation.AFTER_UPDATE) {
             if (RecursionGuard.isFirstRun('Agreement_afterUpdate')) {
                 AgreementService.onAfterUpdate(newList, oldMap);
+                CommissionService.accrueOnAgreementSigned(newList, oldMap);
+                CommissionService.accrueOnRegistration(newList, oldMap);
             }
         }
     }

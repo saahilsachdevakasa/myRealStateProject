@@ -140,6 +140,34 @@ public class TestDataFactory {
         return rc;
     }
 
+    public static Commission_Ledger__c createCommissionLedger(Id bookingId, Id cpAccountId, Map<String, Object> overrides) {
+        Commission_Ledger__c c = new Commission_Ledger__c(
+            Booking__c = bookingId,
+            Channel_Partner__c = cpAccountId,
+            Milestone__c = 'Booking',
+            Milestone_Date__c = Date.today(),
+            Agreement_Value_Basis__c = 1000000,
+            Rate_Pct__c = 2,
+            GST_On_Commission__c = 0,
+            TDS_On_Commission__c = 1000,
+            Status__c = 'Accrued'
+        );
+        applyOverrides(c, overrides);
+        insert c;
+        return c;
+    }
+
+    public static Commission_Payout__c createCommissionPayout(Id cpAccountId, Map<String, Object> overrides) {
+        Commission_Payout__c p = new Commission_Payout__c(
+            Channel_Partner__c = cpAccountId,
+            Payout_Month__c = '2026-04',
+            Status__c = 'Draft'
+        );
+        applyOverrides(p, overrides);
+        insert p;
+        return p;
+    }
+
     public static Opportunity createOpportunity(Id accountId, Map<String, Object> overrides) {
         Opportunity o = new Opportunity(
             Name = 'Test Opportunity',

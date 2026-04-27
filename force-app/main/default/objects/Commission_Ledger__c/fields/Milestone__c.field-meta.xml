@@ -11,6 +11,7 @@
             <value><fullName>Booking</fullName><default>true</default><label>Booking</label></value>
             <value><fullName>Agreement</fullName><default>false</default><label>Agreement</label></value>
             <value><fullName>Registration</fullName><default>false</default><label>Registration</label></value>
+            <value><fullName>Clawback</fullName><default>false</default><label>Clawback</label></value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>
