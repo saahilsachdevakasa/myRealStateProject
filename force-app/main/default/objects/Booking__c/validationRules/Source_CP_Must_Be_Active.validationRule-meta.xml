@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_CP_Must_Be_Active</fullName>
+    <active>true</active>
+    <description>On insert or when Source CP changes, the referenced CP must have CP Status = Active. Direct-buyer Bookings (no Source CP) are unaffected; a CP later going Suspended/Terminated does not retroactively block edits.</description>
+    <errorConditionFormula>AND(
+  OR(ISNEW(), ISCHANGED(Source_CP__c)),
+  NOT(ISBLANK(Source_CP__c)),
+  TEXT(Source_CP__r.CP_Status__c) &lt;&gt; &quot;Active&quot;
+)</errorConditionFormula>
+    <errorDisplayField>Source_CP__c</errorDisplayField>
+    <errorMessage>Source Channel Partner must have an Active CP Status.</errorMessage>
+</ValidationRule>

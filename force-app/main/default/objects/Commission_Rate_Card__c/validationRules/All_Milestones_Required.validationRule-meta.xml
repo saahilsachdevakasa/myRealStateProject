@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Milestones_Required</fullName>
+    <active>true</active>
+    <description>Booking, Agreement, and Registration milestone percentages must all be greater than zero. A rate card without all three milestones is unusable by the commission engine.</description>
+    <errorConditionFormula>OR(
+  ISBLANK(Booking_Pct__c),
+  ISBLANK(Agreement_Pct__c),
+  ISBLANK(Registration_Pct__c),
+  Booking_Pct__c &lt;= 0,
+  Agreement_Pct__c &lt;= 0,
+  Registration_Pct__c &lt;= 0
+)</errorConditionFormula>
+    <errorMessage>All three milestone percentages (Booking, Agreement, Registration) must be greater than zero.</errorMessage>
+</ValidationRule>

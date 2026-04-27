@@ -112,6 +112,34 @@ public class TestDataFactory {
         return a;
     }
 
+    public static Account createCPAccount(Map<String, Object> overrides) {
+        Id cpRtId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Channel_Partner').getRecordTypeId();
+        Account a = new Account(
+            Name = 'Test Channel Partner',
+            RecordTypeId = cpRtId,
+            Phone = '9820000002',
+            CP_Status__c = 'Active',
+            CP_Tier__c = 'Standard'
+        );
+        applyOverrides(a, overrides);
+        insert a;
+        return a;
+    }
+
+    public static Commission_Rate_Card__c createRateCard(Id projectId, Map<String, Object> overrides) {
+        Commission_Rate_Card__c rc = new Commission_Rate_Card__c(
+            Project__c = projectId,
+            CP_Tier__c = 'Standard',
+            Booking_Pct__c = 0.01,
+            Agreement_Pct__c = 0.005,
+            Registration_Pct__c = 0.0025,
+            Effective_From__c = Date.today().addMonths(-6)
+        );
+        applyOverrides(rc, overrides);
+        insert rc;
+        return rc;
+    }
+
     public static Opportunity createOpportunity(Id accountId, Map<String, Object> overrides) {
         Opportunity o = new Opportunity(
             Name = 'Test Opportunity',
