@@ -1,0 +1,8 @@
+.summary-tile {
+    text-align: center;
+    padding: 0.5rem;
+    border-right: 1px solid #ecebea;
+}
+.summary-tile:last-child {
+    border-right: none;
+}

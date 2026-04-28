@@ -1,0 +1,8 @@
+.metric-tile {
+    text-align: center;
+    padding: 1rem;
+    border-right: 1px solid #ecebea;
+}
+.metric-tile:last-child {
+    border-right: none;
+}

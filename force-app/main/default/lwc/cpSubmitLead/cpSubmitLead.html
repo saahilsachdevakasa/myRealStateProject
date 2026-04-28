@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Submit a New Lead" icon-name="standard:lead">
+        <div class="slds-p-around_medium">
+            <lightning-input label="First Name" data-field="firstName" value={firstName} onchange={handleField}></lightning-input>
+            <lightning-input label="Last Name" data-field="lastName" value={lastName} onchange={handleField} required></lightning-input>
+            <lightning-input label="Phone" type="tel" data-field="phone" value={phone} onchange={handleField}></lightning-input>
+            <lightning-input label="Email" type="email" data-field="email" value={email} onchange={handleField}></lightning-input>
+
+            <lightning-combobox label="Project of Interest" data-field="projectId"
+                value={projectId} options={projectOptions} onchange={handleField}
+                placeholder="Select a project" class="slds-m-top_small">
+            </lightning-combobox>
+
+            <lightning-checkbox-group label="Unit Preferences"
+                options={unitOptions} value={unitPreferences} onchange={handleUnitsChange}
+                class="slds-m-top_small">
+            </lightning-checkbox-group>
+
+            <lightning-textarea label="Notes / Buyer Preferences" data-field="notes"
+                value={notes} onchange={handleField}
+                class="slds-m-top_small">
+            </lightning-textarea>
+
+            <div class="slds-m-top_medium slds-text-align_right">
+                <lightning-button variant="brand" label="Submit Lead"
+                    onclick={handleSubmit} disabled={submitting}>
+                </lightning-button>
+            </div>
+            <template if:true={submitting}>
+                <div class="slds-p-top_small slds-text-color_weak">Submitting…</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="My Dashboard" icon-name="standard:dashboard">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </div>
+        </template>
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">Unable to load dashboard data.</div>
+        </template>
+        <template if:true={data}>
+            <div class="slds-grid slds-gutters slds-wrap slds-p-around_medium">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 metric-tile">
+                    <div class="slds-text-title slds-text-color_weak">Leads Submitted</div>
+                    <div class="slds-text-heading_large">{leadCount}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 metric-tile">
+                    <div class="slds-text-title slds-text-color_weak">Active Bookings</div>
+                    <div class="slds-text-heading_large">{activeBookings}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 metric-tile">
+                    <div class="slds-text-title slds-text-color_weak">YTD Commission</div>
+                    <div class="slds-text-heading_large">{ytdCommission}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 metric-tile">
+                    <div class="slds-text-title slds-text-color_weak">Pending Payout</div>
+                    <div class="slds-text-heading_large">{pendingPayouts}</div>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+</template>

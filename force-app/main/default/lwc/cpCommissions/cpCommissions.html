@@ -1,0 +1,42 @@
+<template>
+    <lightning-card title="My Commissions" icon-name="standard:currency">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </div>
+        </template>
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">Unable to load commission data.</div>
+        </template>
+        <template if:true={isEmpty}>
+            <div class="slds-p-around_medium slds-text-color_weak">No commission entries yet.</div>
+        </template>
+        <template lwc:if={summary}>
+            <div class="slds-grid slds-gutters slds-p-around_medium">
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 summary-tile">
+                    <div class="slds-text-title slds-text-color_weak">Total Gross</div>
+                    <div class="slds-text-heading_medium">{totalGross}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 summary-tile">
+                    <div class="slds-text-title slds-text-color_weak">Total Net</div>
+                    <div class="slds-text-heading_medium">{totalNet}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 summary-tile">
+                    <div class="slds-text-title slds-text-color_weak">Pending</div>
+                    <div class="slds-text-heading_medium slds-text-color_weak">{totalAccrued}</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 summary-tile">
+                    <div class="slds-text-title slds-text-color_weak">Paid</div>
+                    <div class="slds-text-heading_medium slds-text-color_success">{totalPaid}</div>
+                </div>
+            </div>
+            <template lwc:if={rows.length}>
+                <div class="slds-p-horizontal_small slds-p-bottom_medium">
+                    <lightning-datatable key-field="id" data={rows} columns={columns}
+                        hide-checkbox-column>
+                    </lightning-datatable>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>
