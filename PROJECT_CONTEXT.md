@@ -4,7 +4,7 @@ Authoritative data model, naming, and patterns reference. Every artefact produce
 
 ## Scope
 
-An SDO-grade MVP Salesforce CRM for Indian residential developers (Lodha/Godrej/DLF-class). Covers Sales Cloud, CP Experience Cloud portal, and two Agentforce agents. No Marketing Cloud, no Service Cloud, no live external integrations.
+An SDO-grade MVP Salesforce CRM for Indian residential developers (Lodha/Godrej/DLF-class). Covers Sales Cloud, CP Experience Cloud portal, and Agentforce. No Marketing Cloud, no Service Cloud, no live external integrations.
 
 ## Target environment
 
@@ -57,7 +57,7 @@ See Phase 1 Architecture Document Section 3 for full field lists.
 - **Sharing**: Private OWD on transactional objects; role hierarchy + ownership-based + criteria-based; sharing sets for CP portal.
 - **Document generation**: VisualForce PDF for MVP. Interface-backed so Phase 2 can swap to Salesforce Docs or Conga.
 - **E-sign**: `IESignService` interface with `Stub` implementation. Leegality adapter in Phase 2.
-- **Agentforce**: two agents (Lead Qualification, Sales RM Copilot). No Data Cloud dependency.
+- **Agentforce**: three agents built directly in the SDO via Agent Builder (not in the original Phase 1 spec, which called for two) — `Lead_Qualification_Agent`, `Sales_RM_Copilot`, and `Booking_Analysis_Agent` (undocumented in Phase 1; report/dashboard analysis via standard CRM Analytics actions). Backfilled into source in E18 — see `docs/epics/E18-agentforce-lead-qualification-and-copilot.md` for the full topic/action breakdown and known gaps against the original spec (no auto-invocation on Lead insert, no DraftMessage action, no Agent_Invocation_Log__c). No Data Cloud dependency.
 
 ## Patterns
 
