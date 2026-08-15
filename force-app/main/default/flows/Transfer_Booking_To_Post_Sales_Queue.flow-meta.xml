@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
+    <assignments>
+        <name>Handle_Owner_Update_Fault</name>
+        <label>Handle Owner Update Fault</label>
+        <locationX>440</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>Fault_Handled</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Queue_Found</name>
+        <label>Queue Found?</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnectorLabel>No Queue Found</defaultConnectorLabel>
+        <rules>
+            <name>Queue_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Post_Sales_Queue.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Booking_Owner</targetReference>
+            </connector>
+            <label>Queue Exists</label>
+        </rules>
+    </decisions>
     <description>On Booking creation, reassign OwnerId to the Post-Sales Queue. Per Phase 1 Architecture Section 5.3 — bookings are owned by Post-Sales from inception; round-robin assignment to a specific Post_Sales_Exec ships in a later epic.</description>
     <environments>Default</environments>
     <interviewLabel>Transfer Booking To Post Sales Queue {!$Flow.CurrentDateTime}</interviewLabel>
@@ -13,7 +48,7 @@
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Update_Booking_Owner</targetReference>
+            <targetReference>Queue_Found</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -38,7 +73,10 @@
         <name>Update_Booking_Owner</name>
         <label>Update Booking Owner</label>
         <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
+        <faultConnector>
+            <targetReference>Handle_Owner_Update_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
@@ -58,4 +96,11 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>Fault_Handled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>
