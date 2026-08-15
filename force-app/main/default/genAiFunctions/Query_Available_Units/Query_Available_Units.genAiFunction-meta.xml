@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Searches available real estate inventory with structured filters. Translates natural language property queries into filtered results.</description>
+    <invocationTarget>QueryAvailableUnitsAction</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Query Available Units</masterLabel>
+</GenAiFunction>

@@ -1,0 +1,37 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "matchCount" : {
+      "title" : "matchCount",
+      "description" : "List of up to 3 matching units with unitCode, configuration, basePrice, facing, matchScore, and rationale",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "matches" : {
+      "title" : "matches",
+      "description" : "Number of matching units found (0-3)",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__MatchInventoryAction$UnitMatch"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "summary" : {
+      "title" : "summary",
+      "description" : "Human-readable summary of all matches",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

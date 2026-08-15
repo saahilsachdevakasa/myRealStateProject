@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>You are an AI Agent whose job is to help analyze report data, provide booking insights, and ensure data accuracy for CRM systems.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jHp000000TPGu</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>p_16jHp000000TPGu_Report_Data_Analysis_16jHp000000TPGu</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>p_16jHp000000TPGu_Report_Data_Analysis_16jHp000000TPGu</fullName>
+        <canEscalate>false</canEscalate>
+        <description>This topic is selected when the user needs to analyze report data to identify booking trends or patterns.</description>
+        <developerName>p_16jHp000000TPGu_Report_Data_Analysis_16jHp000000TPGu</developerName>
+        <genAiPluginInstructions>
+            <description>If the query involves analyzing metrics, use Analytics__AnalyzeMetric.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>instruction_1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>If the query is about summarizing dashboard data, use Analytics__SummarizeDashboard.</description>
+            <developerName>instruction_0</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>instruction_0</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>SummarizeDashboard_179Hp000000wwvo</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>AnalyzeMetric_179Hp000000wwvo</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>AnswerQuestionsWithKnowledge_179Hp000000wwvo</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>SummarizeDashboard_179Hp000000wwvo</fullName>
+            <description>Summarize the contents of a set of visualizations in a dashboard</description>
+            <developerName>SummarizeDashboard_179Hp000000wwvo</developerName>
+            <invocationTarget>summarizeDashboard</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>SummarizeDashboard</localDeveloperName>
+            <masterLabel>Summarize Dashboard</masterLabel>
+            <source>Analytics__SummarizeDashboard</source>
+        </localActions>
+        <localActions>
+            <fullName>AnalyzeMetric_179Hp000000wwvo</fullName>
+            <description>Analyze a semantic sub metric to answer business user questions related to period-over-period differences, risky monopolies, trends, outliers, and breakdowns by dimension.</description>
+            <developerName>AnalyzeMetric_179Hp000000wwvo</developerName>
+            <invocationTarget>sfdc_dqa__AnalyzeMetric</invocationTarget>
+            <invocationTargetType>flow</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>AnalyzeMetric</localDeveloperName>
+            <masterLabel>Analyze Metric</masterLabel>
+            <source>Analytics__AnalyzeMetric</source>
+        </localActions>
+        <localActions>
+            <fullName>AnswerQuestionsWithKnowledge_179Hp000000wwvo</fullName>
+            <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+            <developerName>AnswerQuestionsWithKnowledge_179Hp000000wwvo</developerName>
+            <invocationTarget>streamKnowledgeSearch</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+            <masterLabel>Answer Questions with Knowledge</masterLabel>
+            <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+            <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+        </localActions>
+        <localDeveloperName>p_16jHp000000TPGu_Report_Data_Analysis</localDeveloperName>
+        <masterLabel>Report Data Analysis</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>Your job is to only analyze report data and provide insights on booking trends. You cannot perform tasks unrelated to data analysis or trend identification.</scope>
+    </localTopics>
+    <masterLabel>Booking Analysis Agent</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jHp000000TPGu</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jHp000000TPGu</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__CustomerWebClient</surface>
+        <surfaceType>CustomerWebClient</surfaceType>
+    </plannerSurfaces>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__Messaging</surface>
+        <surfaceType>Messaging</surfaceType>
+    </plannerSurfaces>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

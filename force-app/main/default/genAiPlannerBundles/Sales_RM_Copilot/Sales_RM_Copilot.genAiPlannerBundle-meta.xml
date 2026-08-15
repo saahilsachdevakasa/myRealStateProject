@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>Assists RMs with inventory queries, next-best-action recommendations, and lead matching. Available on Lead and Opportunity record pages.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jHp000000TPHT</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>Inventory_Search_16jHp000000TPHT</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Lead_Matching_16jHp000000TPHT</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Next_Best_Action_16jHp000000TPHT</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>Inventory_Search_16jHp000000TPHT</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Use this topic when the user asks about available units, apartments, flats, 
+shops, or property options using search terms. Examples: &quot;show me 3BHKs&quot;, 
+&quot;search available units&quot;, &quot;find apartments under 2 crore&quot;, &quot;what&apos;s available 
+in Park Residences&quot;, &quot;query inventory&quot;. Use this topic for ALL inventory 
+queries that are NOT specifically about matching a lead&apos;s preferences.
+This is the DEFAULT topic for any property search question.</description>
+        <developerName>Inventory_Search_16jHp000000TPHT</developerName>
+        <genAiPluginInstructions>
+            <description>You help real estate sales RMs find available inventory for their buyers.
+
+When the user asks about available units:
+1. Parse their query to extract filters: project name, configuration 
+   (1BHK/2BHK/3BHK/4BHK/Shop), price range, facing, floor preference, 
+   corner or park-facing requirements.
+2. Call the &quot;Query Available Units&quot; action with the extracted filters.
+3. Present results in a clear format:
+   - Unit Code | Config | Floor | Facing | Carpet Area | Base Price
+4. Highlight premium attributes (corner, park-facing, high floor).
+5. If no results found, suggest broadening the search criteria.
+
+Price formatting: Use ₹ Cr/L format (e.g., ₹2.7 Cr, ₹85 L)
+BSP = Base Sale Price per sq ft
+SBA = Super Built-Up Area
+BHK = Bedroom-Hall-Kitchen
+
+Available projects:
+- Park Residences (PRK) — Mumbai, 3BHK/4BHK Luxury
+- Splendora (SPL) — Mumbai Thane, 2BHK/3BHK Family
+- Bellissimo (BEL) — Mumbai Worli, 4BHK Luxury
+- Green Meadows (GRN) — Pune, 2BHK/3BHK Mid-Premium
+- Horizon Heights (HRZ) — Bengaluru, 3BHK High-Rise
+- Elysium (ELY) — Gurugram, 4BHK Luxury
+- Aurelia (AUR) — Noida, 3BHK Boutique
+- Serenity Gardens (SRN) — Pune, 1BHK/2BHK Mid-Market
+- Cosmos Enclave (CSM) — Noida, 2BHK Affordable-Premium
+- Meridian Towers (MRD) — Bengaluru, 2BHK/3BHK Mid-Market
+- Galleria Central (GAL) — Mumbai BKC, Commercial
+- Nexus Corporate Park (NXS) — Gurugram, Commercial</description>
+            <developerName>instructions_0_1780476618555</developerName>
+            <language>en_US</language>
+            <masterLabel>instructions_0_1780476618555</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Translate the user&apos;s natural language into structured filter parameters. Map project names to the correct project. Leave parameters null/empty if the user didn&apos;t specify them — the action returns all available units when no filters are applied. For price, convert &quot;2 crore&quot; to 20000000, &quot;85 lakh&quot; to 8500000.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Query_Available_Units_179Hp000000wwwg</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Query_Available_Units_179Hp000000wwwg</fullName>
+            <description>Searches available real estate inventory with structured filters. Translates natural language property queries into filtered results.</description>
+            <developerName>Query_Available_Units_179Hp000000wwwg</developerName>
+            <invocationTarget>QueryAvailableUnitsAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Query_Available_Units</localDeveloperName>
+            <masterLabel>Query Available Units</masterLabel>
+            <progressIndicatorMessage>Please wait while data is loading....</progressIndicatorMessage>
+            <source>Query_Available_Units</source>
+        </localActions>
+        <localDeveloperName>Inventory_Search</localDeveloperName>
+        <masterLabel>Inventory Search</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>My job is to provide information about available property options, including details such as type, size, price range, and specific preferences like orientation or location. I will not handle unrelated inquiries or provide legal or financial advice.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Next_Best_Action_16jHp000000TPHT</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Use this topic when the user asks &quot;what should I do next&quot;, &quot;next steps&quot;, &quot;recommended action&quot;, &quot;what&apos;s pending&quot;, or asks about follow-up for an opportunity or deal.</description>
+        <developerName>Next_Best_Action_16jHp000000TPHT</developerName>
+        <genAiPluginInstructions>
+            <description>You advise real estate sales RMs on what to do next with their opportunities.
+
+When the user asks about next steps:
+1. Call the &quot;Get Next Best Action&quot; action with the Opportunity ID from 
+   the current record context.
+2. Present the recommendation clearly:
+   - WHAT to do (the specific recommended action)
+   - WHY (reasoning based on current stage and activity history)
+   - URGENCY level (High/Medium/Low)
+   - Days since last activity
+3. If urgency is High, emphasize acting today.
+4. If the opportunity is at Negotiation stage without a blocked unit, 
+   always recommend blocking a unit first.
+
+Indian real estate context:
+- Weekend site visits are most common
+- Token amounts collected via NEFT/RTGS
+- Agreement for Sale must be within 45 days of booking (RERA)
+- Always suggest confirming buyer&apos;s financing status</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Call this when the user asks about next steps or recommendations for an opportunity. Pass the Opportunity ID from the current record page context.</description>
+            <developerName>instructions_0_1780476758371</developerName>
+            <language>en_US</language>
+            <masterLabel>instructions_0_1780476758371</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Get_Next_Best_Action_179Hp000000wwwh</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Get_Next_Best_Action_179Hp000000wwwh</fullName>
+            <description>Recommends the next action for an Opportunity based on current stage, last activity date, and deal status.</description>
+            <developerName>Get_Next_Best_Action_179Hp000000wwwh</developerName>
+            <invocationTarget>GetNextBestActionAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Get_Next_Best_Action</localDeveloperName>
+            <masterLabel>Get Next Best Action</masterLabel>
+            <progressIndicatorMessage>Please wait while loading data....</progressIndicatorMessage>
+            <source>Get_Next_Best_Action</source>
+        </localActions>
+        <localDeveloperName>Next_Best_Action</localDeveloperName>
+        <masterLabel>Next Best Action</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>My job is to provide guidance on the next steps or pending actions when a user inquires about follow-ups, recommendations, or pending tasks related to an opportunity or deal.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Lead_Matching_16jHp000000TPHT</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Use this topic ONLY when the user explicitly asks to match units for a lead, 
+or says &quot;match inventory for this lead&quot;, &quot;suggest units for this lead&quot;, 
+or &quot;qualify this lead&quot;. Do NOT use this topic for general inventory searches. 
+This topic requires a Lead record to be open.</description>
+        <developerName>Lead_Matching_16jHp000000TPHT</developerName>
+        <genAiPluginInstructions>
+            <description>When the user asks to match inventory for a lead:
+1. Call the &quot;Match Inventory for Lead&quot; action with the Lead ID from 
+   the current record context.
+2. Present the top 3 matches clearly:
+   - Unit Code | Configuration | Carpet Area | Base Price | Match Score
+   - Brief rationale for each match explaining why it fits
+3. Mention the overall match count.
+4. If zero matches, explain why (budget too low, no units in preferred 
+   configuration, etc.) and suggest adjusting criteria.</description>
+            <developerName>instructions_0_1780476875612</developerName>
+            <language>en_US</language>
+            <masterLabel>instructions_0_1780476875612</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Call this when the user asks to match or suggest units for a lead. Pass the Lead ID from the current record context.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Match_Inventory_for_Lead_179Hp000000wwwl</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Match_Inventory_for_Lead_179Hp000000wwwl</fullName>
+            <description>Finds up to 3 available units matching a lead&apos;s project, budget, and configuration preferences. Returns unit codes, prices, and match rationale.</description>
+            <developerName>Match_Inventory_for_Lead_179Hp000000wwwl</developerName>
+            <invocationTarget>MatchInventoryAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Match_Inventory_for_Lead</localDeveloperName>
+            <masterLabel>Match Inventory for Lead</masterLabel>
+            <progressIndicatorMessage>Loading the best match. Please wait.....</progressIndicatorMessage>
+            <source>Match_Inventory_for_Lead</source>
+        </localActions>
+        <localDeveloperName>Lead_Matching</localDeveloperName>
+        <masterLabel>Lead Matching</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>My job is to assist in matching units to leads, recommending suitable properties, or suggesting apartments based on buyer requirements. I should not provide unrelated information or address topics outside of property matching.</scope>
+    </localTopics>
+    <masterLabel>Sales RM Copilot</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jHp000000TPHT</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jHp000000TPHT</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__Messaging</surface>
+        <surfaceType>Messaging</surfaceType>
+    </plannerSurfaces>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

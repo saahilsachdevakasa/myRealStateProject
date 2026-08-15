@@ -1,0 +1,36 @@
+{
+  "required" : [ "utterance", "semanticSubMetricId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "utterance" : {
+      "title" : "User Utterance",
+      "description" : "User's analytical question about a metric. Do not remove \"#noprism#\" from the user's utterance if it is present.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "semanticSubMetricId" : {
+      "title" : "Semantic Sub Metric ID",
+      "description" : "ID of the semantic sub metric",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "chatHistorySummary" : {
+      "title" : "Summary of chat history",
+      "description" : "Summary of the chat session history, to be filled in by the Planner",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "semanticSubMetricTimeRange" : {
+      "title" : "Semantic Sub Metric Time Range",
+      "description" : "Time Range of the semantic sub metric",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

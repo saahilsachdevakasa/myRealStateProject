@@ -1,0 +1,15 @@
+{
+  "required" : [ "dashboardId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "dashboardId" : {
+      "title" : "Dashboard ID",
+      "description" : "ID or API name of the dashboard",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

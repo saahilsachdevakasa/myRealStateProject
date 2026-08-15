@@ -1,0 +1,28 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "count" : {
+      "title" : "count",
+      "description" : "List of matching units with unitCode, configuration, basePrice, carpetArea, facing, floor, projectName, towerName",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "units" : {
+      "title" : "units",
+      "description" : "List of matching units with unitCode, configuration, basePrice, carpetArea, facing, floor, projectName, towerName",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/c__QueryAvailableUnitsAction$UnitResult"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

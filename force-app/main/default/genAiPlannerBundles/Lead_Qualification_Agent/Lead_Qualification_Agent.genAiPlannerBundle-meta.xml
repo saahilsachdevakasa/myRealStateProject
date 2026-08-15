@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>Automatically qualifies inbound leads by matching inventory, scoring budget fit and urgency, and routing to the appropriate RM queue.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jHp000000TPHE</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>GeneralFAQ_16jHp000000TPHE</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Lead_Qualification_16jHp000000TPHE</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>GeneralFAQ_16jHp000000TPHE</fullName>
+        <canEscalate>false</canEscalate>
+        <description>This topic is for helping answer customer&apos;s questions by searching through the knowledge articles and providing information from those articles. The questions can be about the company and its products, policies or business procedures</description>
+        <developerName>GeneralFAQ_16jHp000000TPHE</developerName>
+        <genAiPluginInstructions>
+            <description>If the customer&apos;s question is too vague or general, ask for more details and clarification to give a better answer.</description>
+            <developerName>requestmoredetails</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>request-more-details</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>If you are unable to help the customer even after asking clarifying questions, ask if they want to escalate this issue to a live agent.</description>
+            <developerName>unabletohelpafterclarifying</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>unable-to-help-after-clarifying</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>If you are unable to answer customer&apos;s questions, ask if they want to escalate this issue to a live agent.</description>
+            <developerName>unabletoanswerquestions</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>unable-to-answer-questions</masterLabel>
+            <sortOrder>2</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Never provide generic information, advice or troubleshooting steps, unless retrieved from searching knowledge articles.</description>
+            <developerName>avoidgenericinformation</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>avoid-generic-information</masterLabel>
+            <sortOrder>3</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Include sources in your response when available from the knowledge articles, otherwise proceed without them.</description>
+            <developerName>includearticlesources</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>include-article-sources</masterLabel>
+            <sortOrder>4</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>AnswerQuestionsWithKnowledge_179Hp000000wwwK</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>AnswerQuestionsWithKnowledge_179Hp000000wwwK</fullName>
+            <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+            <developerName>AnswerQuestionsWithKnowledge_179Hp000000wwwK</developerName>
+            <invocationTarget>streamKnowledgeSearch</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+            <masterLabel>Answer Questions with Knowledge</masterLabel>
+            <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+            <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+        </localActions>
+        <localDeveloperName>GeneralFAQ</localDeveloperName>
+        <masterLabel>General FAQ</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>Your job is solely to help with issues and answer questions about the company, its products, procedures, or policies by searching knowledge articles.</scope>
+        <source>SvcCopilotTmpl__GeneralFAQ</source>
+    </localTopics>
+    <localTopics>
+        <fullName>Lead_Qualification_16jHp000000TPHE</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Use this topic when a new lead needs to be qualified, scored, or routed to a sales team. This includes matching the lead&apos;s preferences against available inventory and assigning a Hot/Warm/Cold score.</description>
+        <developerName>Lead_Qualification_16jHp000000TPHE</developerName>
+        <genAiPluginInstructions>
+            <description>You are a Lead Qualification specialist for a real estate developer in India.
+
+When given a lead:
+1. First, call the &quot;Match Inventory for Lead&quot; action to find up to 3 available 
+   units that match the lead&apos;s preferences (project, budget, configuration).
+2. Then, call the &quot;Score and Route Lead&quot; action with the lead ID and the 
+   number of matches found.
+3. Summarize the results: the lead&apos;s score (Hot/Warm/Cold), the matched 
+   units with brief rationale for each, and where the lead was routed.
+
+Always respond in a professional, concise manner suitable for a sales manager 
+reviewing the qualification output.
+
+Key terminology:
+- BSP = Base Sale Price (per square foot)
+- SBA = Super Built-Up Area
+- BHK = Bedroom-Hall-Kitchen (Indian apartment configuration)
+- PLC = Preferential Location Charge (corner, park-facing, floor rise)
+- RERA = Real Estate Regulatory Authority registration number</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Match_Inventory_for_Lead_179Hp000000wwwP</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Score_and_Route_Lead_179Hp000000wwwP</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Score_and_Route_Lead_179Hp000000wwwP</fullName>
+            <description>Scores a lead as Hot/Warm/Cold based on urgency, budget clarity, and inventory match quality. Routes to the appropriate RM queue.</description>
+            <developerName>Score_and_Route_Lead_179Hp000000wwwP</developerName>
+            <invocationTarget>ScoreAndRouteLeadAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Score_and_Route_Lead</localDeveloperName>
+            <masterLabel>Score and Route Lead</masterLabel>
+            <progressIndicatorMessage>Please wait the data is loading.....</progressIndicatorMessage>
+            <source>Score_and_Route_Lead</source>
+        </localActions>
+        <localActions>
+            <fullName>Match_Inventory_for_Lead_179Hp000000wwwP</fullName>
+            <description>Finds up to 3 available units matching a lead&apos;s project, budget, and configuration preferences. Returns unit codes, prices, and match rationale.</description>
+            <developerName>Match_Inventory_for_Lead_179Hp000000wwwP</developerName>
+            <invocationTarget>MatchInventoryAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Match_Inventory_for_Lead</localDeveloperName>
+            <masterLabel>Match Inventory for Lead</masterLabel>
+            <progressIndicatorMessage>Loading the best match. Please wait.....</progressIndicatorMessage>
+            <source>Match_Inventory_for_Lead</source>
+        </localActions>
+        <localDeveloperName>Lead_Qualification</localDeveloperName>
+        <masterLabel>Lead Qualification</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I can classify inbound leads, assign scores based on predefined criteria, and route them appropriately based on their budget, configuration preferences, project interests, and urgency. My job is only to handle the classification and routing of leads within these parameters.</scope>
+    </localTopics>
+    <masterLabel>Lead Qualification Agent</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jHp000000TPHE</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jHp000000TPHE</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__Messaging</surface>
+        <surfaceType>Messaging</surfaceType>
+    </plannerSurfaces>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

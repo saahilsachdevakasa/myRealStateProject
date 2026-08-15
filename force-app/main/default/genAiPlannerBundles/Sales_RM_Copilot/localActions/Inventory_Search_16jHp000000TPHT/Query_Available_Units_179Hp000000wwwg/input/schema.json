@@ -1,0 +1,72 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "configuration" : {
+      "title" : "Configuration",
+      "description" : "Unit type: 1BHK, 2BHK, 3BHK, 4BHK, or Shop",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "cornerOnly" : {
+      "title" : "Corner Only",
+      "description" : "If true, only return corner units",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "facing" : {
+      "title" : "Facing",
+      "description" : "Direction: North, South, East, West, North-East, etc.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "maxPrice" : {
+      "title" : "Max Price",
+      "description" : "Maximum base price in INR",
+      "multipleOf" : 1.0E-34,
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "maxResults" : {
+      "title" : "Max Results",
+      "description" : "Maximum number of results to return (default 10)",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "minFloor" : {
+      "title" : "Min Floor",
+      "description" : "Minimum floor number",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "minPrice" : {
+      "title" : "Min Price",
+      "description" : "Minimum base price in INR",
+      "multipleOf" : 1.0E-34,
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "parkFacingOnly" : {
+      "title" : "Park Facing Only",
+      "description" : "If true, only return park-facing units",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "projectId" : {
+      "title" : "Project Id",
+      "description" : "Salesforce ID of the Project to search in",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

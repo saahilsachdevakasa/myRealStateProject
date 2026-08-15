@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Recommends the next action for an Opportunity based on current stage, last activity date, and deal status.</description>
+    <invocationTarget>GetNextBestActionAction</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Get Next Best Action</masterLabel>
+</GenAiFunction>

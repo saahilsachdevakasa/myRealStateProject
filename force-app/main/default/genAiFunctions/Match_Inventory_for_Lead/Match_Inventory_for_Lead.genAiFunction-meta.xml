@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Finds up to 3 available units matching a lead&apos;s project, budget, and configuration preferences. Returns unit codes, prices, and match rationale.</description>
+    <invocationTarget>MatchInventoryAction</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Match Inventory for Lead</masterLabel>
+</GenAiFunction>

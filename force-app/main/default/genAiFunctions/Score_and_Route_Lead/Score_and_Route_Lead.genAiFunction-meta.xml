@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Scores a lead as Hot/Warm/Cold based on urgency, budget clarity, and inventory match quality. Routes to the appropriate RM queue.</description>
+    <invocationTarget>ScoreAndRouteLeadAction</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Score and Route Lead</masterLabel>
+</GenAiFunction>

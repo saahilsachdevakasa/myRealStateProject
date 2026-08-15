@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Booking_Analysis_Agent</members>
+        <members>Lead_Qualification_Agent</members>
+        <members>Sales_RM_Copilot</members>
+        <name>GenAiPlannerBundle</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>GenAiPlugin</name>
+    </types>
+    <version>65.0</version>
+</Package>
