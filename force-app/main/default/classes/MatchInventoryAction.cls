@@ -1,4 +1,27 @@
+/**
+ * @description Finds the best-matching available Units for a Lead's stated preferences
+ *              and stamps a human-readable summary onto `Lead.Suggested_Units__c`.
+ *
+ *              Bulkified: Leads are hydrated with one `Id IN :ids` query, and the unit
+ *              search is issued once for every distinct Project referenced across the
+ *              batch (`Tower__r.Project__c IN :pids`) rather than once per Lead. Budget
+ *              filtering, the per-Lead 50-unit cap, preference filtering and scoring all
+ *              run in memory. The `Suggested_Units__c` writes are batched into a single
+ *              `update`. Total cost: 2 SOQL + 1 DML for the whole invocation.
+ */
 public with sharing class MatchInventoryAction {
+
+    /** Per-Lead cap on candidate units considered — was the `LIMIT 50` on the old per-Lead query. */
+    private static final Integer MAX_UNITS_PER_LEAD = 50;
+
+    /**
+     * Ceiling on rows pulled by the single batched unit query. The full demo portfolio is
+     * 720 units, so this covers every Project in one pass with headroom. Rows are ordered
+     * by Base_Price ASC, so if a far larger org ever hits this ceiling it is the most
+     * expensive units that drop out — the same end of the range the old per-Lead
+     * `LIMIT 50` discarded first.
+     */
+    private static final Integer MAX_UNITS_SCANNED = 2000;
 
     public class MatchRequest {
         @InvocableVariable(required=true label='Lead Id')
@@ -25,16 +48,58 @@ public with sharing class MatchInventoryAction {
         @InvocableVariable public String summary;
     }
 
+    /**
+     * @description Matches inventory for every Lead in the request list.
+     * @param requests One MatchRequest per Lead.
+     * @return One MatchResponse per request, in the same order as the input.
+     */
     @InvocableMethod(label='Match Inventory for Lead' description='Finds up to 3 available units matching the lead preferences and updates Lead.Suggested_Units__c.')
     public static List<MatchResponse> matchInventory(List<MatchRequest> requests) {
         List<MatchResponse> results = new List<MatchResponse>();
+        if (requests == null || requests.isEmpty()) return results;
+
+        // ---- PASS 1: harvest Lead Ids across the whole batch ----
+        Set<Id> leadIds = new Set<Id>();
         for (MatchRequest req : requests) {
-            results.add(matchOne(req));
+            if (req != null && req.leadId != null) leadIds.add(req.leadId);
         }
+
+        Map<Id, Lead> leadsById = new Map<Id, Lead>();
+        if (!leadIds.isEmpty()) {
+            leadsById = new Map<Id, Lead>([
+                SELECT Id, Project_Interest__c, Budget_Min__c, Budget_Max__c,
+                       Unit_Type_Preference__c, Location_Preference__c,
+                       Project_Interest__r.Name
+                FROM Lead WHERE Id IN :leadIds
+                WITH SECURITY_ENFORCED
+            ]);
+        }
+
+        // ---- PASS 2: one unit query covering every Project referenced by the batch ----
+        Set<Id> projectIds = new Set<Id>();
+        for (Lead l : leadsById.values()) {
+            if (l.Project_Interest__c != null) projectIds.add(l.Project_Interest__c);
+        }
+        Map<Id, List<Unit__c>> availableUnitsByProject = queryAvailableUnitsByProject(projectIds);
+
+        // ---- PASS 3: match and score in memory, staging the Lead writes ----
+        Map<Id, Lead> leadsToUpdate = new Map<Id, Lead>();
+        for (MatchRequest req : requests) {
+            results.add(matchOne(req, leadsById, availableUnitsByProject, leadsToUpdate));
+        }
+
+        // ---- PASS 4: one DML for the whole batch ----
+        if (!leadsToUpdate.isEmpty()) update leadsToUpdate.values();
+
         return results;
     }
 
-    private static MatchResponse matchOne(MatchRequest req) {
+    private static MatchResponse matchOne(
+        MatchRequest req,
+        Map<Id, Lead> leadsById,
+        Map<Id, List<Unit__c>> availableUnitsByProject,
+        Map<Id, Lead> leadsToUpdate
+    ) {
         MatchResponse resp = new MatchResponse();
         resp.matches = new List<UnitMatch>();
         resp.matchCount = 0;
@@ -44,24 +109,17 @@ public with sharing class MatchInventoryAction {
             return resp;
         }
 
-        List<Lead> leads = [
-            SELECT Id, Project_Interest__c, Budget_Min__c, Budget_Max__c,
-                   Unit_Type_Preference__c, Location_Preference__c,
-                   Project_Interest__r.Name
-            FROM Lead WHERE Id = :req.leadId
-            WITH SECURITY_ENFORCED LIMIT 1
-        ];
-        if (leads.isEmpty()) {
+        Lead lead = leadsById.get(req.leadId);
+        if (lead == null) {
             resp.summary = 'Lead not found.';
             return resp;
         }
-        Lead lead = leads[0];
         if (lead.Project_Interest__c == null) {
             resp.summary = 'Lead has no Project of Interest. Set Project_Interest__c before matching inventory.';
             return resp;
         }
 
-        List<Unit__c> units = queryAvailableUnits(lead);
+        List<Unit__c> units = unitsInBudget(lead, availableUnitsByProject.get(lead.Project_Interest__c));
 
         Set<String> prefs = parsePreferences(lead.Unit_Type_Preference__c);
         List<UnitMatch> scored = new List<UnitMatch>();
@@ -86,29 +144,59 @@ public with sharing class MatchInventoryAction {
             if (suggested.length() > 0) suggested += '\n\n';
             suggested += m.unitCode + ' — ' + m.rationale;
         }
-        update new Lead(Id = lead.Id, Suggested_Units__c = (suggested.length() > 0 ? suggested : null));
+        leadsToUpdate.put(
+            lead.Id,
+            new Lead(Id = lead.Id, Suggested_Units__c = (suggested.length() > 0 ? suggested : null))
+        );
 
         return resp;
     }
 
-    private static List<Unit__c> queryAvailableUnits(Lead lead) {
-        Decimal minB = lead.Budget_Min__c;
-        Decimal maxB = lead.Budget_Max__c;
+    /**
+     * @description One query for every Project in the batch, partitioned in memory.
+     *              Ordered by Base_Price ASC so each partition preserves the price
+     *              ordering the per-Lead budget filter and 50-row cap rely on.
+     */
+    private static Map<Id, List<Unit__c>> queryAvailableUnitsByProject(Set<Id> projectIds) {
+        Map<Id, List<Unit__c>> byProject = new Map<Id, List<Unit__c>>();
+        if (projectIds == null || projectIds.isEmpty()) return byProject;
+
         String soql = 'SELECT Id, Name, Unit_Code__c, Configuration__c, Base_Price__c, ' +
             'Carpet_Area_sqft__c, Super_BuiltUp_Area_sqft__c, BSP_Per_Sqft__c, ' +
             'Facing__c, Corner_Unit__c, Park_Facing__c, Floor__c, Unit_Number__c, ' +
-            'Tower__r.Name, Tower__r.Project__r.Name, Tower__r.Project__r.Project_Code__c ' +
-            'FROM Unit__c WHERE Tower__r.Project__c = :pid AND Unit_Status__c = \'Available\'';
-        if (minB != null) soql += ' AND Base_Price__c >= :minB';
-        if (maxB != null) soql += ' AND Base_Price__c <= :maxB';
-        soql += ' ORDER BY Base_Price__c ASC LIMIT 50';
+            'Tower__r.Name, Tower__r.Project__c, Tower__r.Project__r.Name, Tower__r.Project__r.Project_Code__c ' +
+            'FROM Unit__c WHERE Tower__r.Project__c IN :pids AND Unit_Status__c = \'Available\' ' +
+            'ORDER BY Base_Price__c ASC LIMIT ' + MAX_UNITS_SCANNED;
 
-        Map<String, Object> binds = new Map<String, Object>{
-            'pid' => lead.Project_Interest__c,
-            'minB' => minB,
-            'maxB' => maxB
-        };
-        return (List<Unit__c>) Database.queryWithBinds(soql, binds, AccessLevel.USER_MODE);
+        Map<String, Object> binds = new Map<String, Object>{ 'pids' => projectIds };
+        for (Unit__c u : (List<Unit__c>) Database.queryWithBinds(soql, binds, AccessLevel.USER_MODE)) {
+            if (u.Tower__r == null || u.Tower__r.Project__c == null) continue;
+            Id pid = u.Tower__r.Project__c;
+            if (!byProject.containsKey(pid)) byProject.put(pid, new List<Unit__c>());
+            byProject.get(pid).add(u);
+        }
+        return byProject;
+    }
+
+    /**
+     * @description Applies the Lead's budget window in memory, mirroring the SOQL
+     *              semantics of the old per-Lead query: a null Base_Price is excluded
+     *              whenever a bound is supplied, and at most MAX_UNITS_PER_LEAD of the
+     *              cheapest qualifying units are returned.
+     */
+    private static List<Unit__c> unitsInBudget(Lead lead, List<Unit__c> projectUnits) {
+        List<Unit__c> inBudget = new List<Unit__c>();
+        if (projectUnits == null || projectUnits.isEmpty()) return inBudget;
+
+        Decimal minB = lead.Budget_Min__c;
+        Decimal maxB = lead.Budget_Max__c;
+        for (Unit__c u : projectUnits) {
+            if (minB != null && (u.Base_Price__c == null || u.Base_Price__c < minB)) continue;
+            if (maxB != null && (u.Base_Price__c == null || u.Base_Price__c > maxB)) continue;
+            inBudget.add(u);
+            if (inBudget.size() == MAX_UNITS_PER_LEAD) break;
+        }
+        return inBudget;
     }
 
     private static Set<String> parsePreferences(String prefField) {

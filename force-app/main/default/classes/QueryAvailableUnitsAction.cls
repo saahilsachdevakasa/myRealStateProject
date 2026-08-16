@@ -1,3 +1,18 @@
+/**
+ * @description Searches available Units by project, configuration, price, facing, floor
+ *              and amenity filters. Backs the Agentforce inventory-lookup topic.
+ *
+ *              Bulkified: every project reference across the whole `queries` list — Id,
+ *              Name (fuzzy) or Project_Code__c (exact) — is resolved in a single query
+ *              up front, replacing the up-to-2 project lookups the old code issued per
+ *              query object. The unit search itself stays per query object because each
+ *              carries its own arbitrary filter combination and row limit; batching it
+ *              would mean pulling the whole Unit table into heap for an unfiltered
+ *              request. Instead the remaining SOQL allowance is checked before the loop
+ *              so an over-large batch fails with an actionable message rather than an
+ *              uncatchable governor exception. Cost: 1 SOQL for project resolution + 1
+ *              per query object (was up to 3 per query object).
+ */
 public with sharing class QueryAvailableUnitsAction {
 
     public class UnitQuery {
@@ -34,43 +49,118 @@ public with sharing class QueryAvailableUnitsAction {
         @InvocableVariable public Integer count;
     }
 
+    /**
+     * @description Runs one unit search per query object.
+     * @param queries One UnitQuery per search.
+     * @return One QueryResponse per query, in the same order as the input.
+     */
     @InvocableMethod(label='Query Available Units' description='Search available units by project, configuration, price, facing, floor, and amenity filters.')
     public static List<QueryResponse> queryUnits(List<UnitQuery> queries) {
         List<QueryResponse> results = new List<QueryResponse>();
-        for (UnitQuery q : queries) {
-            results.add(queryOne(q));
+        if (queries == null || queries.isEmpty()) return results;
+
+        // ---- PASS 1: resolve every project reference in the batch with one query ----
+        Map<Integer, Id> resolvedProjectIdByIndex = resolveProjectReferences(queries);
+
+        // ---- PASS 2: one selective, indexed unit search per query object ----
+        assertQueryCapacity(queries.size());
+        for (Integer i = 0; i < queries.size(); i++) {
+            results.add(queryOne(queries[i], resolvedProjectIdByIndex.get(i)));
         }
         return results;
     }
 
-    private static QueryResponse queryOne(UnitQuery q) {
+    /**
+     * @description Resolves the project reference for every query object in one SOQL.
+     *              Preserves the original precedence: explicit Id wins, then a fuzzy
+     *              Name match, then an exact Project_Code__c match. Lets Agentforce
+     *              agents pass the names/codes they see in conversation without first
+     *              resolving them to Ids.
+     * @return Map of query-list index → resolved Project Id (absent when unresolved).
+     */
+    private static Map<Integer, Id> resolveProjectReferences(List<UnitQuery> queries) {
+        Map<Integer, Id> byIndex = new Map<Integer, Id>();
+
+        Set<String> names = new Set<String>();
+        Set<String> codes = new Set<String>();
+        for (UnitQuery q : queries) {
+            if (q == null || q.projectId != null) continue;
+            if (String.isNotBlank(q.projectName)) names.add(q.projectName);
+            // A code is still collected when a name is present: the name match may miss,
+            // in which case the original code fell through to the code lookup.
+            if (String.isNotBlank(q.projectCode)) codes.add(q.projectCode);
+        }
+
+        List<Project__c> candidates = new List<Project__c>();
+        if (!names.isEmpty() || !codes.isEmpty()) {
+            List<String> clauses = new List<String>();
+            Map<String, Object> binds = new Map<String, Object>();
+            Integer n = 0;
+            for (String nm : names) {
+                String key = 'name' + n++;
+                binds.put(key, '%' + nm + '%');
+                clauses.add('Name LIKE :' + key);
+            }
+            if (!codes.isEmpty()) {
+                binds.put('codes', codes);
+                clauses.add('Project_Code__c IN :codes');
+            }
+            String soql = 'SELECT Id, Name, Project_Code__c FROM Project__c WHERE ' +
+                String.join(clauses, ' OR ') + ' ORDER BY Name ASC';
+            candidates = (List<Project__c>) Database.queryWithBinds(soql, binds, AccessLevel.USER_MODE);
+        }
+
+        for (Integer i = 0; i < queries.size(); i++) {
+            UnitQuery q = queries[i];
+            if (q == null) continue;
+
+            Id resolved = q.projectId;
+            if (resolved == null && String.isNotBlank(q.projectName)) {
+                for (Project__c p : candidates) {
+                    if (String.isNotBlank(p.Name) && p.Name.containsIgnoreCase(q.projectName)) {
+                        resolved = p.Id;
+                        break;
+                    }
+                }
+            }
+            if (resolved == null && String.isNotBlank(q.projectCode)) {
+                for (Project__c p : candidates) {
+                    if (q.projectCode.equalsIgnoreCase(p.Project_Code__c)) {
+                        resolved = p.Id;
+                        break;
+                    }
+                }
+            }
+            if (resolved != null) byIndex.put(i, resolved);
+        }
+        return byIndex;
+    }
+
+    /**
+     * @description Fails fast with an actionable message when the batch is larger than
+     *              the transaction's remaining SOQL allowance, instead of letting an
+     *              uncatchable `System.LimitException` surface mid-loop.
+     */
+    private static void assertQueryCapacity(Integer itemCount) {
+        Integer remaining = Limits.getLimitQueries() - Limits.getQueries();
+        if (itemCount > remaining) {
+            throw new AuraHandledException(
+                'Too many unit searches in one invocation: ' + itemCount + ' requested but only ' +
+                remaining + ' SOQL queries remain in this transaction. Split the request into smaller batches.'
+            );
+        }
+    }
+
+    private static QueryResponse queryOne(UnitQuery q, Id resolvedProjectId) {
         QueryResponse resp = new QueryResponse();
         resp.units = new List<UnitResult>();
+        if (q == null) {
+            resp.count = 0;
+            return resp;
+        }
 
         Integer lim = (q.maxResults != null && q.maxResults > 0) ? q.maxResults : 10;
         if (lim > 100) lim = 100;
-
-        // Resolve a project reference: prefer the Id, fall back to a Name LIKE match,
-        // then to an exact Project_Code__c match. Lets Agentforce agents pass the
-        // names/codes they see in conversation without first resolving them to Ids.
-        Id resolvedProjectId = q.projectId;
-        if (resolvedProjectId == null && String.isNotBlank(q.projectName)) {
-            String pattern = '%' + q.projectName + '%';
-            List<Project__c> projects = [
-                SELECT Id FROM Project__c
-                WHERE Name LIKE :pattern
-                WITH SECURITY_ENFORCED LIMIT 1
-            ];
-            if (!projects.isEmpty()) resolvedProjectId = projects[0].Id;
-        }
-        if (resolvedProjectId == null && String.isNotBlank(q.projectCode)) {
-            List<Project__c> projects = [
-                SELECT Id FROM Project__c
-                WHERE Project_Code__c = :q.projectCode
-                WITH SECURITY_ENFORCED LIMIT 1
-            ];
-            if (!projects.isEmpty()) resolvedProjectId = projects[0].Id;
-        }
 
         String soql = 'SELECT Id, Name, Unit_Code__c, Configuration__c, Base_Price__c, ' +
             'Carpet_Area_sqft__c, Super_BuiltUp_Area_sqft__c, BSP_Per_Sqft__c, ' +

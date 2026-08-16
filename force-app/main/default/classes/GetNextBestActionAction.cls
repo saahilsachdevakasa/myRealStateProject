@@ -1,3 +1,12 @@
+/**
+ * @description Recommends the next best action for an Opportunity based on stage,
+ *              activity recency and key financial fields.
+ *
+ *              Bulkified: every Opportunity referenced across the request list is
+ *              hydrated with a single `Id IN :ids` query; the recommendation itself
+ *              is pure in-memory logic, so the whole invocation costs 1 SOQL and
+ *              0 DML regardless of request count.
+ */
 public with sharing class GetNextBestActionAction {
 
     public class NBARequest {
@@ -12,16 +21,41 @@ public with sharing class GetNextBestActionAction {
         @InvocableVariable public Integer daysSinceLastActivity;
     }
 
+    /**
+     * @description Produces a next-best-action recommendation per request.
+     * @param requests One NBARequest per Opportunity.
+     * @return One NBAResponse per request, in the same order as the input.
+     */
     @InvocableMethod(label='Get Next Best Action' description='Recommends the next action for an Opportunity based on stage, activity, and key fields.')
     public static List<NBAResponse> getNBA(List<NBARequest> requests) {
         List<NBAResponse> results = new List<NBAResponse>();
+        if (requests == null || requests.isEmpty()) return results;
+
+        // ---- PASS 1: harvest Opportunity Ids across the whole batch ----
+        Set<Id> opportunityIds = new Set<Id>();
         for (NBARequest req : requests) {
-            results.add(getOne(req));
+            if (req != null && req.opportunityId != null) opportunityIds.add(req.opportunityId);
+        }
+
+        // ---- PASS 2: one query for the whole batch ----
+        Map<Id, Opportunity> oppsById = new Map<Id, Opportunity>();
+        if (!opportunityIds.isEmpty()) {
+            oppsById = new Map<Id, Opportunity>([
+                SELECT Id, StageName, Primary_Unit__c, LastActivityDate, CloseDate, CreatedDate,
+                       EOI_Amount__c, Token_Amount__c, Quoted_Gross_Value__c, Booking__c
+                FROM Opportunity WHERE Id IN :opportunityIds
+                WITH SECURITY_ENFORCED
+            ]);
+        }
+
+        // ---- PASS 3: score in memory, preserving 1:1 request→result ordering ----
+        for (NBARequest req : requests) {
+            results.add(getOne(req, oppsById));
         }
         return results;
     }
 
-    private static NBAResponse getOne(NBARequest req) {
+    private static NBAResponse getOne(NBARequest req, Map<Id, Opportunity> oppsById) {
         NBAResponse resp = new NBAResponse();
         if (req == null || req.opportunityId == null) {
             resp.recommendedAction = 'Provide an Opportunity Id.';
@@ -29,18 +63,12 @@ public with sharing class GetNextBestActionAction {
             return resp;
         }
 
-        List<Opportunity> opps = [
-            SELECT Id, StageName, Primary_Unit__c, LastActivityDate, CloseDate, CreatedDate,
-                   EOI_Amount__c, Token_Amount__c, Quoted_Gross_Value__c, Booking__c
-            FROM Opportunity WHERE Id = :req.opportunityId
-            WITH SECURITY_ENFORCED LIMIT 1
-        ];
-        if (opps.isEmpty()) {
+        Opportunity o = oppsById.get(req.opportunityId);
+        if (o == null) {
             resp.recommendedAction = 'Opportunity not found.';
             resp.urgency = 'Low';
             return resp;
         }
-        Opportunity o = opps[0];
 
         Date referenceDate = (o.LastActivityDate != null) ? o.LastActivityDate : o.CreatedDate.date();
         Integer days = referenceDate.daysBetween(Date.today());

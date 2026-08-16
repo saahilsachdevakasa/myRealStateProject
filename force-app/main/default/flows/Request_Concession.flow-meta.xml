@@ -25,6 +25,9 @@
         <connector>
             <targetReference>Success_Screen</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Opportunity__c</field>
             <value>
@@ -154,6 +157,30 @@
         <fields>
             <name>Success_Display</name>
             <fieldText>&lt;p&gt;&lt;b&gt;Concession request submitted.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;You can submit it for approval from the Concession Request record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Error</label>
+        <locationX>440</locationX>
+        <locationY>518</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Error_Display</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Something went wrong.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
