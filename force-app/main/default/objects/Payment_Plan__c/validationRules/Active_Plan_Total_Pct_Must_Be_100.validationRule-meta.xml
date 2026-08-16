@@ -3,7 +3,7 @@
     <fullName>Active_Plan_Total_Pct_Must_Be_100</fullName>
     <active>true</active>
     <description>Active payment plans must have milestone percentages summing to exactly 100. Enforced per Naming Convention Appendix Section 7.</description>
-    <errorConditionFormula>AND(Active__c, Milestone_Count__c &gt; 0, Total_Pct_Check__c &lt;&gt; 100)</errorConditionFormula>
+    <errorConditionFormula>AND(Active__c, Milestone_Count__c &gt; 0, ABS(Total_Pct_Check__c - 1) &gt; 0.001)</errorConditionFormula>
     <errorDisplayField>Total_Pct_Check__c</errorDisplayField>
     <errorMessage>Milestones must sum to 100% for an active plan.</errorMessage>
 </ValidationRule>

@@ -87,6 +87,27 @@ When given an epic ID (e.g., "start E07"):
 6. Deploy: `sf project deploy start --target-org <alias>`.
 7. Update `docs/epics/E07-*.md` with an "Implemented" section listing what was produced.
 
+## Agent orchestration
+
+The epic execution protocol above describes *what* happens; this section describes *who* does it. Seven specialist subagents live in `.claude/agents/` — each encodes this project's conventions for one domain, so they don't need re-deriving from scratch every session (the same spirit as non-negotiable #1: don't invent new conventions, apply the ones already established).
+
+**The seven agents, in pipeline order:**
+
+1. `salesforce-design` — reads the epic (or a one-off request), asks clarifying questions, produces `agent-output/E{nn}-design.md` splitting Admin work from Development work.
+2. `salesforce-admin` — builds declarative metadata (objects, fields, validation rules, Flows, permission sets, approval processes, assignment rules). Creates and locally validates only — it does not deploy.
+3. `salesforce-developer` — builds Apex and LWC.
+4. `salesforce-unit-testing` — writes test classes for what `salesforce-developer` produced.
+5. `salesforce-code-review` — reviews **both** `salesforce-admin`'s and `salesforce-developer`'s output (this project's review agent covers Flows and Validation Rules alongside Apex/LWC, not just code). Nothing proceeds past this step without an APPROVED or APPROVED WITH WARNINGS verdict.
+6. `salesforce-devops` and `salesforce-documentation` run **in parallel** once review passes — deployment and epic-doc/gotcha upkeep don't depend on each other.
+
+Steps 2 and 3 can run in either order, or interleave, depending on the epic — but both must finish before step 5 starts; don't let review begin against partial output from either.
+
+**Confirmation gates** — these aren't new, they're the existing checkpoints named explicitly so the pipeline stops at the right places: the design output gets reviewed with Sahil before "start E{nn}" proceeds (`docs/epics/README.md`'s own workflow), a CHANGES REQUIRED verdict from code review always stops the pipeline, an APPROVED WITH WARNINGS verdict is a real decision for Sahil to make (deploy now vs. fix first), and devops never deploys outside the epic's declared scope without confirmation (already covered under "What NOT to do" below).
+
+**Delegation discipline:** route Apex/LWC work to `salesforce-developer`, declarative work to `salesforce-admin`, test classes to `salesforce-unit-testing`, review to `salesforce-code-review`, deployment to `salesforce-devops`, and documentation/gotcha upkeep to `salesforce-documentation` — rather than doing any of it directly in the main session.
+
+Every agent reads `CLAUDE.md` and `PROJECT_CONTEXT.md` first, per non-negotiable #1, plus the epic file in flight.
+
 ## What NOT to do
 
 - Do not auto-upgrade dependencies.
@@ -260,3 +281,7 @@ These are Salesforce metadata-schema quirks discovered during metadata generatio
 ## E15 gotchas (Experience Cloud / Community LWC targets)
 
 47. **The Experience Cloud LWC target is `lightningCommunity__Page`, NOT `lightning__CommunityPage`.** Note the position of the namespace separator: in `lightningCommunity__Page` the double underscore is *between* the namespace `lightningCommunity` and the type `Page`. The older `lightning__CommunityPage` form (double underscore between `lightning` and `CommunityPage`) is rejected at deploy with `lightning__CommunityPage is not a valid TARGETS` on this SDO. Same naming applies to `lightningCommunity__Default` (any-region placement) and `lightningCommunity__Theme_Layout` (theme layouts). Internal-only targets keep the older single-namespace form: `lightning__RecordPage`, `lightning__AppPage`, `lightning__HomePage`, `lightning__FlowScreen`, `lightning__Tab`. Bundle multiple targets when the component should appear in both portal and internal contexts — that's the whole point of the dual target list. Audit before deploy: `grep -rh '<target>lightning__CommunityPage' force-app/main/default/lwc/` should return zero hits; if not, sed-replace to `lightningCommunity__Page` across all matching `*.js-meta.xml` files.
+
+## General gotchas (Roll-Up Summary fields on Percent-type children)
+
+48. **A Roll-Up Summary field that SUMs a `Percent`-type child field is read as a 0–1 fraction inside Validation Rule / Formula context, but as its human-readable 0–100 number everywhere else (SOQL, Apex, UI, reports).** Symptom: a validation rule like `AND(Active__c, Milestone_Count__c > 0, Total_Pct_Check__c <> 100)` fires on every record even when every read path (SOQL, aggregate `SUM()`, Apex `Decimal` equality, Tooling API) independently confirms the roll-up field is exactly `100`. Neither redeploying the rule text, switching to a tolerance-based comparison (`ABS(Total_Pct_Check__c - 100) > 0.01`), nor a full delete-and-recreate of the `ValidationRule` component changes the outcome — because the bug isn't the formula's wording or a stale compile, it's the scale of the literal being compared against. Root-caused by adding a throwaway `Formula(Number)` field on the same object with body `= Total_Pct_Check__c` and reading it back via SOQL: it evaluated to `1`, not `100`, for a roll-up the API reported as `100`. **Fix**: compare the roll-up to the 0–1 fraction, not the 0–100 number — `AND(Active__c, Milestone_Count__c > 0, ABS(Total_Pct_Check__c - 1) > 0.001)`. The small tolerance (rather than exact `<> 1`) matters here specifically because fraction-space introduces genuine binary floating-point imprecision for values that were clean at ×100 scale (e.g., 7.5% → 0.075). This only affects Roll-Up Summary fields whose `summarizedField` is `Percent`-typed — plain standalone `Percent` custom fields referenced directly in a formula use the normal 0–100 form, matching the API. Audit: `grep -l 'summarizedField.*' force-app/main/default/objects/*/fields/*.field-meta.xml` cross-referenced against `<type>Percent</type>` on the summarized field; any Validation Rule, Formula field, or Flow decision element comparing that roll-up to a 0–100 literal is affected and needs the same fraction-space rewrite.
